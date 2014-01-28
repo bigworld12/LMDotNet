@@ -26,14 +26,12 @@ namespace LMDotNet.CSharpTest
         }
 
         static void Main(string[] args) {
-            // solver configuration
-            var ctrl = SolverSettings.GetDefaultSettings();
-            ctrl.verbose = true; // enable status messages
+            var lmaSolver = new LMSolver(verbose: true);
             
             // First solution: start at (1.0, 1.0)
-            var res1 = LMSolver.Solve(Program.IntersectUnitCircleParabola, new[] { 1.0, 1.0 }, ctrl);            
+            var res1 = lmaSolver.Solve(Program.IntersectUnitCircleParabola, new[] { 1.0, 1.0 });            
             // second solution: start at (-1.0, 1.0)
-            var res2 = LMSolver.Solve(Program.IntersectUnitCircleParabola, new[] { -1.0, 1.0 }, ctrl);
+            var res2 = lmaSolver.Solve(Program.IntersectUnitCircleParabola, new[] { -1.0, 1.0 });
 
             Console.WriteLine();
             Console.WriteLine("=============================================================");
