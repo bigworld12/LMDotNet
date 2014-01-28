@@ -46,6 +46,17 @@ namespace LMDotNet.CSharpTest
             {
                 Console.WriteLine("2nd solution: x = {0}, y = {1}", res2.optimizedParameters[0], res2.optimizedParameters[1]);
             }
+
+            /////////// New in v1.2.0: Using the "safe" Func-based API //////////////////
+            var res3 = lmaSolver.Solve(p => new[] { p[0] * p[0] + p[1] * p[1] - 1.0, // unit circle 0 = x^2 + y^2 - 1
+                                                    p[1] - p[0] * p[0] },            // parabola    0 = y - x^2
+                                       initialGuess: new[] { 1.0, 1.0 });
+            if (res3.outcome == SolverStatus.ConvergedBoth ||
+                res3.outcome == SolverStatus.ConvergedParam ||
+                res3.outcome == SolverStatus.ConvergedSumSq) 
+            {
+                Console.WriteLine("safe -- 1st solution: x = {0}, y = {1}", res2.optimizedParameters[0], res2.optimizedParameters[1]);
+            }
         }
     }
 }

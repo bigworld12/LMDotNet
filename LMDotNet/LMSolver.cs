@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LMDotNet.Native;
+using System.Runtime.InteropServices;
 
 namespace LMDotNet
 {
@@ -153,6 +154,16 @@ namespace LMDotNet
             };
 
             return result;
+        }
+
+        public unsafe OptimizationResult Solve(Func<double[], double[]> fun, double[] initialGuess) {
+            LMDelegate nativeFun = (par, m_dat, data, fvec, userbreak) => {
+                var p = new double[initialGuess.Length];
+                Marshal.Copy(par, p, 0, p.Length);
+                var f = fun(p);
+                Marshal.Copy(f, 0, fvec, f.Length);
+            };
+            return Solve(nativeFun, initialGuess);
         }
     }
 }
