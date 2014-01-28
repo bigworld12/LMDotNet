@@ -52,10 +52,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LMDotNet.NativeBridge\LMDotNet.NativeBridge.vcxproj">
-      <Project>{d0039343-bc54-4864-b934-ced9bbabb29b}</Project>
-      <Name>LMDotNet.NativeBridge</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LMDotNet\LMDotNet.csproj">
       <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
       <Name>LMDotNet</Name>

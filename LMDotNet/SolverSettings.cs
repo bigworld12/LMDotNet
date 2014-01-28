@@ -57,15 +57,17 @@ namespace LMDotNet
         private const double defaultTolerance = 1.0e-14;
 
         // from lmmin.c (== lm_control_double)
-        public static readonly SolverSettings defaultSettings = new SolverSettings() { 
-            ftol = defaultTolerance,
-            xtol = defaultTolerance,
-            gtol = defaultTolerance,
-            epsilon = defaultTolerance,
-            stepbound = 100.0,
-            patience = 100,
-            scale_diag = 1,
-            verbose = false
-        };
+        public static SolverSettings GetDefaultSettings() {
+            return new SolverSettings() {
+                ftol = defaultTolerance,
+                xtol = defaultTolerance,
+                gtol = defaultTolerance,
+                epsilon = defaultTolerance,
+                stepbound = 100.0,
+                patience = 100,
+                scale_diag = 1,
+                verbose = false
+            };
+        }
     }  
 }

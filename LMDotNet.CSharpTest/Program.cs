@@ -11,7 +11,7 @@ namespace LMDotNet.CSharpTest
     class Program
     {
         // Function to be evaluated must have a signature according to
-        // LMDotNet.LMDelegate, e.g.:
+        // LMDotNet.LMDelegate (native callback, called from lmmin C code), e.g.:
         //      demo: intersect parabola with unit circle
         static unsafe void IntersectUnitCircleParabola(IntPtr par, int m_dat, IntPtr data, IntPtr fvec, IntPtr userbreak) {
             // par and fvec are native double* (double arrays), passed in
@@ -27,8 +27,8 @@ namespace LMDotNet.CSharpTest
 
         static void Main(string[] args) {
             // solver configuration
-            var ctrl = SolverSettings.defaultSettings;
-            ctrl.verbose = true; // print status messages
+            var ctrl = SolverSettings.GetDefaultSettings();
+            ctrl.verbose = true; // enable status messages
             
             // First solution: start at (1.0, 1.0)
             var res1 = LMSolver.Solve(Program.IntersectUnitCircleParabola, new[] { 1.0, 1.0 }, ctrl);            

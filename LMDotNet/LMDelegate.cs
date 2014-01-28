@@ -16,5 +16,6 @@ namespace LMDotNet
     /// <param name="data">[In] Auxilliary data (void*) (usually 0/null)</param>
     /// <param name="fvec">[Out] Residue vector resulting from evaluating the system using the parameters in par</param>
     /// <param name="userbreak">[Out] Request termination (usually 0)</param>
+    [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
     public delegate void LMDelegate([In] IntPtr par, int m_dat, [In] IntPtr data, [Out] IntPtr fvec, [Out] IntPtr userbreak);
 }
