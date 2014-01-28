@@ -9,19 +9,19 @@ namespace LMDotNet
     public class OptimizationResult
     {
         /// <summary>
-        /// determined optimia
+        /// Determined optimial parameters
         /// </summary>
         public double[] optimizedParameters;
 
         /// <summary>
-        /// norm of the residue vector fvec
+        /// Norm of the residue vector fvec
         /// </summary> 
-        public double fnorm;
+        public double errorNorm;
 
         /// <summary>
         /// actual number of iterations
         /// </summary>
-        public int nfev;
+        public int iterations;
 
         /// <summary>
         /// Status indicator (converged, failed, ...)
@@ -31,11 +31,11 @@ namespace LMDotNet
         /// <summary>
         /// Status message
         /// </summary>
-        public string outcomeMessage;
+        public string message;
 
         /// <summary>
         /// Set when function evaluation requests termination
         /// </summary>
-        public int userbreak;
+        public bool terminatedByUserRequest;
     }    
 }

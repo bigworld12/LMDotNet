@@ -72,9 +72,6 @@ namespace LMDotNet
             "exploded   (fatal coding error: improper input parameters)",
             "stopped    (break requested within function evaluation)" };
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="ftol">Relative error desired in the sum of squares.
         /// Termination occurs when both the actual and
         /// predicted relative reductions in the sum of squares
@@ -117,9 +114,14 @@ namespace LMDotNet
             this.verbose = verbose;
         }
 
+        /// <summary>
+        /// Solve a system of nonlinear equations (in a least-squares sense,
+        /// i.e. by fitting parameters to minimize a residue vector)
+        /// </summary>
+        /// <param name="fun">The system to solve</param>
+        /// <param name="initialGuess">Initial guess for the free variables</param>
+        /// <returns>Optimized parameters</returns>
         public OptimizationResult Solve(LMDelegate fun, double[] initialGuess) {
-            LMStatusStruct stat = new LMStatusStruct();
-
             LMControlStruct ctrl = new LMControlStruct {
                 ftol = this.ftol,
                 gtol = this.gtol,
@@ -136,15 +138,17 @@ namespace LMDotNet
             
             double[] optimizedPars = new double[initialGuess.Length];
             initialGuess.CopyTo(optimizedPars, 0);
-            
+        
+            LMStatusStruct stat = new LMStatusStruct();
+            // call native lmmin from lmfit package
             LMFit.lmmin(initialGuess.Length, optimizedPars, initialGuess.Length, IntPtr.Zero, fun, ref ctrl, ref stat);
 
             OptimizationResult result = new OptimizationResult {
-                fnorm = stat.fnorm,
-                nfev = stat.nfev,
+                errorNorm = stat.fnorm,
+                iterations = stat.nfev,
                 optimizedParameters = optimizedPars,
-                outcomeMessage = LMSolver.outcomeMessages[stat.outcome],
-                userbreak = stat.userbreak,
+                message = LMSolver.outcomeMessages[stat.outcome],
+                terminatedByUserRequest = stat.userbreak > 0? true : false,
                 outcome = (SolverStatus)stat.outcome
             };
 

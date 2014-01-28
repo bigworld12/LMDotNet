@@ -12,10 +12,10 @@ namespace LMDotNet
     /// is to be evaluated
     /// </summary>
     /// <param name="par">[In] Current values of the free variables/parameters (double*)</param>
-    /// <param name="m_dat">Number of equations/data points (double*)</param>
+    /// <param name="m_dat">Number of equations/data points</param>
     /// <param name="data">[In] Auxilliary data (void*) (usually 0/null)</param>
-    /// <param name="fvec">[Out] Residue vector resulting from evaluating the system using the parameters in par</param>
-    /// <param name="userbreak">[Out] Request termination (usually 0)</param>
-    [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
+    /// <param name="fvec">[Out] Residue vector resulting from evaluating the system using the parameters in par (double*)</param>
+    /// <param name="userbreak">[Out] Request termination if *userbreak == 1 (int*) (usually 0)</param>
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void LMDelegate([In] IntPtr par, int m_dat, [In] IntPtr data, [Out] IntPtr fvec, [Out] IntPtr userbreak);
 }
