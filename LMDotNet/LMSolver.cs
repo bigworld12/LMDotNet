@@ -14,23 +14,23 @@ namespace LMDotNet
         /// Termination occurs when both the actual and
         /// predicted relative reductions in the sum of squares
         /// are at most ftol.</summary>
-        double ftol;
+        public double Ftol { get; set; }
 
         /// <summary> Relative error between last two approximations.
         /// Termination occurs when the relative error between
         /// two consecutive iterates is at most xtol.</summary>
-        double xtol;
+        public double Xtol { get; set; }
 
         /// <summary> Orthogonality desired between fvec and its derivs.
         /// Termination occurs when the cosine of the angle
         /// between fvec and any column of the Jacobian is at
-        /// most gtol in absolute value. </summary>
-        double gtol;
+        /// most gtol in absolute value. (measure of degeneracy) </summary>
+        public double Gtol { get; set; }
 
         /// <summary> Step used to calculate the Jacobian, should be
         /// slightly larger than the relative error in the
         /// user - supplied functions.</summary>
-        double epsilon;
+        public double Epsilon { get; set; }
 
         /// <summary> Used in determining the initial step bound. This
         /// bound is set to the product of stepbound and the
@@ -38,23 +38,23 @@ namespace LMDotNet
         /// stepbound itself. In most cases stepbound should lie
         /// in the interval (0.1,100.0). Generally, the value
         /// 100.0 is recommended.</summary>         
-        double stepbound;
+        public double InitialStepbound { get; set; }
 
         /// <summary>
         /// Used to set the maximum number of function evaluations
         /// to patience*(number_of_parameters+1)
         /// </summary>
-        int patience;
+        public int MaxIterations { get; set; }
 
         /// <summary>
         /// If true, the variables will be rescaled internally. Recommended value is 1.
         /// </summary>
-        bool scale_diag;
+        public bool ScaleDiagonal { get; set; }
 
         /// <summary>
         /// true: print status messages to stdout
         /// </summary>
-        bool verbose;
+        public bool VerboseOutput { get; set; }
 
         // from lmmin.c
         private const double defaultTolerance = 1.0e-14;
@@ -95,7 +95,7 @@ namespace LMDotNet
         /// 100.0 is recommended.</param>
         /// <param name="patience">Used to set the maximum number of function evaluations
         /// to patience*(number_of_parameters+1)</param>
-        /// <param name="scale_diag">If 1, the variables will be rescaled internally. Recommended value is 1.</param>
+        /// <param name="scaleDiagonal">If 1, the variables will be rescaled internally. Recommended value is 1.</param>
         /// <param name="verbose">true: print status messages to stdout</param>
         public LMSolver(double ftol = defaultTolerance,
                         double xtol = defaultTolerance,
@@ -105,14 +105,14 @@ namespace LMDotNet
                         int patience = 100,
                         bool scaleDiagonal = true,
                         bool verbose = false) {
-            this.ftol = ftol;
-            this.xtol = xtol;
-            this.gtol = gtol;
-            this.epsilon = epsilon;
-            this.stepbound = stepbound;
-            this.patience = patience;
-            this.scale_diag = scaleDiagonal;
-            this.verbose = verbose;
+            this.Ftol = ftol;
+            this.Xtol = xtol;
+            this.Gtol = gtol;
+            this.Epsilon = epsilon;
+            this.InitialStepbound = stepbound;
+            this.MaxIterations = patience;
+            this.ScaleDiagonal = scaleDiagonal;
+            this.VerboseOutput = verbose;
         }
 
         /// <summary>
@@ -124,17 +124,17 @@ namespace LMDotNet
         /// <returns>Optimized parameters</returns>
         public OptimizationResult Solve(LMDelegate fun, double[] initialGuess) {
             LMControlStruct ctrl = new LMControlStruct {
-                ftol = this.ftol,
-                gtol = this.gtol,
-                xtol = this.xtol,
-                patience = this.patience,
-                epsilon = this.epsilon,
+                ftol = this.Ftol,
+                gtol = this.Gtol,
+                xtol = this.Xtol,
+                patience = this.MaxIterations,
+                epsilon = this.Epsilon,
                 msgfile = IntPtr.Zero,
                 m_maxpri = -1,
                 n_maxpri = -1,
-                scale_diag = this.scale_diag? 1 : 0,
-                stepbound = this.stepbound,
-                verbosity = this.verbose ? 31 : 0
+                scale_diag = this.ScaleDiagonal? 1 : 0,
+                stepbound = this.InitialStepbound,
+                verbosity = this.VerboseOutput ? 31 : 0
             };
             
             double[] optimizedPars = new double[initialGuess.Length];
