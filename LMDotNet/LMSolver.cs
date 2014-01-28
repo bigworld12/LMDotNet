@@ -46,9 +46,9 @@ namespace LMDotNet
         int patience;
 
         /// <summary>
-        /// If 1, the variables will be rescaled internally. Recommended value is 1.
+        /// If true, the variables will be rescaled internally. Recommended value is 1.
         /// </summary>
-        int scale_diag;
+        bool scale_diag;
 
         /// <summary>
         /// true: print status messages to stdout
@@ -105,7 +105,7 @@ namespace LMDotNet
                         double epsilon = defaultTolerance,
                         double stepbound = 100.0,
                         int patience = 100,
-                        int scale_diag = 1,
+                        bool scaleDiagonal = true,
                         bool verbose = false) {
             this.ftol = ftol;
             this.xtol = xtol;
@@ -113,7 +113,7 @@ namespace LMDotNet
             this.epsilon = epsilon;
             this.stepbound = stepbound;
             this.patience = patience;
-            this.scale_diag = scale_diag;
+            this.scale_diag = scaleDiagonal;
             this.verbose = verbose;
         }
 
@@ -129,7 +129,7 @@ namespace LMDotNet
                 msgfile = IntPtr.Zero,
                 m_maxpri = -1,
                 n_maxpri = -1,
-                scale_diag = this.scale_diag,
+                scale_diag = this.scale_diag? 1 : 0,
                 stepbound = this.stepbound,
                 verbosity = this.verbose ? 31 : 0
             };
