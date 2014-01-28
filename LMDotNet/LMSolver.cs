@@ -134,7 +134,7 @@ namespace LMDotNet
                 n_maxpri = -1,
                 scale_diag = this.ScaleDiagonal? 1 : 0,
                 stepbound = this.InitialStepbound,
-                verbosity = this.VerboseOutput ? 31 : 0
+                verbosity = this.VerboseOutput ? 3 : 0
             };
             
             double[] optimizedPars = new double[initialGuess.Length];

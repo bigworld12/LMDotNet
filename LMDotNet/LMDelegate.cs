@@ -13,7 +13,7 @@ namespace LMDotNet
     /// </summary>
     /// <param name="par">[In] Current values of the free variables/parameters (double*)</param>
     /// <param name="m_dat">Number of equations/data points</param>
-    /// <param name="data">[In] Auxilliary data (void*) (usually 0/null)</param>
+    /// <param name="data">[In] Auxilliary data (void*) (for curve fitting; otherwise usually 0/null)</param>
     /// <param name="fvec">[Out] Residue vector resulting from evaluating the system using the parameters in par (double*)</param>
     /// <param name="userbreak">[Out] Request termination if *userbreak == 1 (int*) (usually 0)</param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

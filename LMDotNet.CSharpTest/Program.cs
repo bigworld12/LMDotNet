@@ -21,7 +21,7 @@ namespace LMDotNet.CSharpTest
             
             // evaluate non-linear system/residuals based on
             // parameter vector p
-            f[0] = p[0] * p[0] + p[1] * p[1] - 1; // unit circle        x^2 + y^2 = 1
+            f[0] = p[0] * p[0] + p[1] * p[1] - 1.0; // unit circle        x^2 + y^2 = 1
             f[1] = p[1] - p[0] * p[0];            // standard parabola  y = x^2
         }
 
