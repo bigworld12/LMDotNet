@@ -47,7 +47,9 @@ namespace LMDotNet.CSharpTest
                 Console.WriteLine("2nd solution: x = {0}, y = {1}", res2.optimizedParameters[0], res2.optimizedParameters[1]);
             }
 
-            /////////// New in v1.2.0: Using the "safe" Func-based API //////////////////
+            /////////// New in v1.2.0: Using the "safe" API //////////////////
+                        
+            // Func-based: requires a double[] allocation for each iteration            
             var res3 = lmaSolver.Solve(p => new[] { p[0] * p[0] + p[1] * p[1] - 1.0, // unit circle 0 = x^2 + y^2 - 1
                                                     p[1] - p[0] * p[0] },            // parabola    0 = y - x^2
                                        initialGuess: new[] { 1.0, 1.0 });
@@ -55,7 +57,17 @@ namespace LMDotNet.CSharpTest
                 res3.outcome == SolverStatus.ConvergedParam ||
                 res3.outcome == SolverStatus.ConvergedSumSq) 
             {
-                Console.WriteLine("safe -- 1st solution: x = {0}, y = {1}", res2.optimizedParameters[0], res2.optimizedParameters[1]);
+                Console.WriteLine("Func-based -- 1st solution: x = {0}, y = {1}", res3.optimizedParameters[0], res3.optimizedParameters[1]);
+            }
+
+            // Action-based: requires no additional allocations
+            var res4 = lmaSolver.Solve((p, r) => { r[0] = p[0] * p[0] + p[1] * p[1] - 1.0;  // unit circle 0 = x^2 + y^2 - 1
+                                                   r[1] = p[1] - p[0] * p[0]; },            // parabola    0 = y - x^2
+                                       initialGuess: new[] { 1.0, 1.0 });
+            if (res4.outcome == SolverStatus.ConvergedBoth ||
+                res4.outcome == SolverStatus.ConvergedParam ||
+                res4.outcome == SolverStatus.ConvergedSumSq) {
+                Console.WriteLine("Action-based -- 1st solution: x = {0}, y = {1}", res4.optimizedParameters[0], res4.optimizedParameters[1]);
             }
         }
     }
