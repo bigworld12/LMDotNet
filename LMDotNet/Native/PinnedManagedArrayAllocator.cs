@@ -16,6 +16,10 @@ namespace LMDotNet.Native
         private Dictionary<IntPtr, T[]> baseAddressToManagedArray;
         private Dictionary<IntPtr, GCHandle> baseAddressToGCHandle;
         
+        public T[] this[IntPtr pBase] {
+            get { return baseAddressToManagedArray[pBase]; }
+        }    
+
         public PinnedManagedArrayAllocator() {
             this.baseAddressToManagedArray = new Dictionary<IntPtr, T[]>();
             this.baseAddressToGCHandle = new Dictionary<IntPtr, GCHandle>();
@@ -30,11 +34,6 @@ namespace LMDotNet.Native
             baseAddressToManagedArray[pBase] = managedArray;
             baseAddressToGCHandle[pBase] = gcHandle;
             return pBase;
-        }
-
-        // This is what you would use instead of, e.g. Marshal.Copy()
-        public T[] GetManagedArray(IntPtr pBase) {
-            return baseAddressToManagedArray[pBase];
         }
 
         // TODO: implement a correct Dispose() method...

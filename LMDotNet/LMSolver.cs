@@ -157,20 +157,19 @@ namespace LMDotNet
         /// <returns>Optimized parameters and status</returns>
         public OptimizationResult Solve(Action<double[], double[]> fun, double[] initialGuess) {            
             var allocator = new PinnedManagedArrayAllocator<double>();
+
             // optimizedPars must be allocated via allocator, because
-            // the first callback-call pases a pointer to this array
-            // in the "par" parameter
+            // the first callback-call (== call to nativeFun) pases a 
+            // pointer to optimizedPars in the "par" parameter
             var pOptimizedPars = allocator.AllocateArray(initialGuess.Length);
-            double[] optimizedPars = allocator.GetManagedArray(pOptimizedPars);
+            double[] optimizedPars = allocator[pOptimizedPars];
             initialGuess.CopyTo(optimizedPars, 0);           
-
-            LMDelegate nativeFun = (par, m_dat, data, fvec, userbreak) => {
-                var parameters = allocator.GetManagedArray(par);
-                var residuals = allocator.GetManagedArray(fvec);
-                fun(parameters, residuals);
-            };
-
-            var result = SolveNative(nativeFun, optimizedPars, allocator.AllocateArray);
+                        
+            var result = SolveNative(
+                // translate Action<double[],double[]> to LMDelegate
+                (par, m_dat, data, fvec, userbreak) => fun(allocator[par], allocator[fvec]),
+                optimizedPars, 
+                allocator.AllocateArray);
             
             // managed arrays allocated by lmmin may be freed starting from here
             // (if not referenced anymore)
