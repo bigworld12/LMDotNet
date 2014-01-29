@@ -1,0 +1,186 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>lmfit: a self-contained C library for Levenberg-Marquardt least-squares minimization and curve fitting</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+<!--
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#copying">COPYING</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+
+-->
+
+
+</div>
+<!-- INDEX END -->
+
+<link rel="stylesheet" href="podstyle.css" type="text/css" /><p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>lmcurve - Levenberg-Marquardt least-squares curve fitting</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>#include &lt;lmcurve.h</strong>&gt;</p>
+<p><strong>void lmcurve( int</strong> <em>n_par</em><strong>, double *</strong><em>par</em><strong>, int</strong> <em>m_dat</em><strong>,
+              const&nbsp;double *</strong><em>t</em><strong>, const&nbsp;double *</strong><em>y</em><strong>,
+              double (*</strong><em>f</em><strong>)( double </strong><em>ti</em><strong>, const double *</strong><em>par</em><strong> ),
+              const&nbsp;lm_control_struct *</strong><em>control</em><strong>,
+              const&nbsp;lm_princon_struct *</strong><em>princon</em><strong>,
+              lm_status_struct *</strong><em>status</em><strong>);</strong></p>
+<p><strong>extern const lm_control_struct lm_control_double;</strong></p>
+<p><strong>extern const lm_control_struct lm_control_float;</strong></p>
+<p><strong>extern const lm_princon_struct lm_princon_std;</strong></p>
+<p><strong>extern const char *lm_infmsg[];</strong></p>
+<p><strong>extern const char *lm_shortmsg[];</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><strong>lmcurve()</strong> wraps the more generic minimization function <strong>lmmin()</strong>,
+for use in curve fitting.</p>
+<p><strong>lmcurve()</strong> determines a vector <em>par</em> that minimizes the sum of squared elements of a residue vector <em>r</em>[i] := <em>y</em>[i] - <em>f</em>(<em>t</em>[i];<em>par</em>). Typically, <strong>lmcurve()</strong> is used to approximate a data set <em>t</em>,<em>y</em> by a parametric function <em>f</em>(<em>ti</em>;<em>par</em>). On success, <em>par</em> represents a local minimum, not necessarily a global one; it may depend on its starting value.</p>
+<p>Function arguments:</p>
+<dl>
+<dt><strong><a name="n_par" class="item"><em>n_par</em></a></strong></dt>
+
+<dd>
+<p>Number of free variables. Dimension of parameter vector <em>par</em>.</p>
+</dd>
+<dt><strong><a name="par" class="item"><em>par</em></a></strong></dt>
+
+<dd>
+<p>Parameter vector. On input, it must contain a reasonable guess; on output, it contains the solution found to minimize ||<em>r</em>||.</p>
+</dd>
+<dt><strong><a name="m_dat" class="item"><em>m_dat</em></a></strong></dt>
+
+<dd>
+<p>Number of data points. Dimension of vectors <em>t</em> and <em>y</em>.
+Must statisfy <em>n_par</em> &lt;= <em>m_dat</em>.</p>
+</dd>
+<dt><strong><a name="t" class="item"><em>t</em></a></strong></dt>
+
+<dd>
+<p>Array of length <em>m_dat</em>.
+Contains the abcissae (time, or &quot;x&quot;) for which function <em>f</em> will be evaluated.</p>
+</dd>
+<dt><strong><a name="y" class="item"><em>y</em></a></strong></dt>
+
+<dd>
+<p>Array of length <em>m_dat</em>.
+Contains the ordinate values that shall be fitted.</p>
+</dd>
+<dt><strong><a name="f" class="item"><em>f</em></a></strong></dt>
+
+<dd>
+<p>A user-supplied parametric function <em>f</em>(ti;<em>par</em>).</p>
+</dd>
+<dt><strong><a name="control" class="item"><em>control</em></a></strong></dt>
+
+<dd>
+<p>Parameter collection for tuning the fit procedure.
+In most cases, the default &amp;<em>lm_control_double</em> is adequate.
+If <em>f</em> is only computed with single-precision accuracy,
+<em>&amp;lm_control_float</em> should be used.
+Parameters are explained in <strong>lmmin(3)</strong>.</p>
+</dd>
+<dt><strong><a name="princon" class="item"><em>princon</em></a></strong></dt>
+
+<dd>
+<p>Parameter collection for tuning monitoring messages.
+For values NULL or &amp;<em>lm_princon_def</em>, the fit is silent.
+Parameters are explained in <strong>lmmin(3)</strong>.</p>
+</dd>
+<dt><strong><a name="status" class="item"><em>status</em></a></strong></dt>
+
+<dd>
+<p>A record used to return information about the minimization process:
+For details, see <strong>lmmin(3)</strong>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p>Fit a data set y(x) by a curve f(x;p):</p>
+<pre>
+    #include &quot;lmcurve.h&quot;
+    #include &lt;stdio.h&gt;</pre>
+<pre>
+    /* model function: a parabola */</pre>
+<pre>
+    double f( double t, const double *p )
+    {
+        return p[0] + p[1]*t + p[2]*t*t;
+    }</pre>
+<pre>
+    int main()
+    {
+        int n = 3; /* number of parameters in model function f */
+        double par[3] = { 100, 0, -10 }; /* really bad starting value */</pre>
+<pre>
+        /* data points: a slightly distorted standard parabola */
+        int m = 9;
+        int i;
+        double t[9] = { -4., -3., -2., -1.,  0., 1.,  2.,  3.,  4. };
+        double y[9] = { 16.6, 9.9, 4.4, 1.1, 0., 1.1, 4.2, 9.3, 16.4 };</pre>
+<pre>
+        lm_control_struct control = lm_control_double;
+        lm_status_struct status;
+        control.verbosity = 7;</pre>
+<pre>
+        printf( &quot;Fitting ...\n&quot; );
+        lmcurve( n, par, m, t, y, f, &amp;control, &amp;status );</pre>
+<pre>
+        printf( &quot;Results:\n&quot; );
+        printf( &quot;status after %d function evaluations:\n  %s\n&quot;,
+                status.nfev, lm_infmsg[status.outcome] );</pre>
+<pre>
+        printf(&quot;obtained parameters:\n&quot;);
+        for ( i = 0; i &lt; n; ++i)
+            printf(&quot;  par[%i] = %12g\n&quot;, i, par[i]);
+        printf(&quot;obtained norm:\n  %12g\n&quot;, status.fnorm );</pre>
+<pre>
+        printf(&quot;fitting data as follows:\n&quot;);
+        for ( i = 0; i &lt; m; ++i)
+            printf( &quot;  t[%2d]=%4g y=%6g fit=%10g residue=%12g\n&quot;,
+                    i, t[i], y[i], f(t[i],par), y[i] - f(t[i],par) );</pre>
+<pre>
+        return 0;
+    }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copying">COPYING</a></h1>
+<p>Copyright (C) 2009-2013 Joachim Wuttke, Forschungszentrum Juelich GmbH</p>
+<p>Software: FreeBSD License</p>
+<p>Documentation: Creative Commons Attribution Share Alike</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<a href="http://apps.jcns.fz-juelich.de/man/lmmin.html"><b>lmmin</b>(3)</a><p>Homepage: <a href="http://apps.jcns.fz-juelich.de/lmfit">http://apps.jcns.fz-juelich.de/lmfit</a></p>
+<p>Please report bugs to the author &lt;<a href="mailto:j.wuttke@fz-juelich.de">j.wuttke@fz-juelich.de</a>&gt;</p>
+
+</body>
+
+</html>
