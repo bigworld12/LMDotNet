@@ -113,6 +113,10 @@ void lm_print_pars( int nout, const double *par, double fnorm, FILE* fout )
     fprintf( fout, " => %18.11g\n", fnorm );
 }
 
+// default native array allocator used in lmmin
+double* __stdcall malloc_array_allocator(int length) {
+    return (double *)malloc(length * sizeof(double));
+}
 
 /*****************************************************************************/
 /*  lmmin (main minimization routine)                                        */
@@ -121,7 +125,8 @@ void lm_print_pars( int nout, const double *par, double fnorm, FILE* fout )
 void lmmin( int n, double *x, int m, const void *data,
             void (*evaluate) (const double *par, int m_dat, const void *data,
                               double *fvec, int *userbreak),
-            const lm_control_struct *C, lm_status_struct *S )
+            const lm_control_struct *C, lm_status_struct *S,
+            double_array_allocator_t alloc_dp_array)
 {
     double *fvec, *diag, *fjac, *qtf, *wa1, *wa2, *wa3, *wf;
     int *ipvt;
@@ -131,7 +136,7 @@ void lmmin( int n, double *x, int m, const void *data,
     static double p0001 = 1.0e-4;
 
     int maxfev = C->patience * (n+1);
-
+    
     int    outer, inner;  /* loop counters, for monitoring */
     int    inner_success; /* flag for loop control */
     double lmpar = 0;     /* Levenberg-Marquardt parameter */
@@ -143,7 +148,7 @@ void lmmin( int n, double *x, int m, const void *data,
 
     /* The workaround msgfile=NULL is needed for default initialization */
     FILE* msgfile = C->msgfile ? C->msgfile : stdout;
-
+    
     /* Default status info; must be set ahead of first return statements */    
     S->outcome = 0;      /* status code */
     S->userbreak = 0;
@@ -189,14 +194,14 @@ void lmmin( int n, double *x, int m, const void *data,
 
 /***  Allocate work space.  ***/
 
-    if ( (fvec = (double *) malloc(m * sizeof(double))) == NULL ||
-         (diag = (double *) malloc(n * sizeof(double))) == NULL ||
-         (qtf  = (double *) malloc(n * sizeof(double))) == NULL ||
-         (fjac = (double *) malloc(n*m*sizeof(double))) == NULL ||
-         (wa1  = (double *) malloc(n * sizeof(double))) == NULL ||
-         (wa2  = (double *) malloc(n * sizeof(double))) == NULL ||
-         (wa3  = (double *) malloc(n * sizeof(double))) == NULL ||
-         (wf  = (double *)  malloc(m * sizeof(double))) == NULL ||
+    if ( (fvec = alloc_dp_array(m)) == NULL ||
+         (diag = alloc_dp_array(n)) == NULL ||
+         (qtf  = alloc_dp_array(n)) == NULL ||
+         (fjac = alloc_dp_array(n * m)) == NULL ||
+         (wa1  = alloc_dp_array(n)) == NULL ||
+         (wa2  = alloc_dp_array(n)) == NULL ||
+         (wa3  = alloc_dp_array(n)) == NULL ||
+         (wf  = alloc_dp_array(m)) == NULL ||
          (ipvt = (int *)    malloc(n * sizeof(int)   )) == NULL    ) {
         S->outcome = 9;
         return;
@@ -504,14 +509,14 @@ terminate:
         S->outcome = 11;
 
 /***  Deallocate the workspace.  ***/
-    free(fvec);
+    /*free(fvec);
     free(diag);
     free(qtf);
     free(fjac);
     free(wa1);
     free(wa2);
     free(wa3);
-    free(wf);
+    free(wf);*/ // allocated on managed heap
     free(ipvt);
 
 } /*** lmmin. ***/

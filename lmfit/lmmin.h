@@ -28,11 +28,17 @@
 
 __BEGIN_DECLS
 
+typedef double* (__stdcall *double_array_allocator_t)(int count);
+
+// default native array allocator used in lmmin
+double* __stdcall malloc_array_allocator(int length);
+
 /* Levenberg-Marquardt minimization. */
 __declspec(dllexport) void lmmin(int n_par, double *par, int m_dat, const void *data,
             void (*evaluate) (const double *par, int m_dat, const void *data,
                               double *fvec, int *userbreak),
-            const lm_control_struct *control, lm_status_struct *status );
+            const lm_control_struct *control, lm_status_struct *status,
+            double_array_allocator_t alloc_dp_array);
 /*
  *   This routine contains the core algorithm of our library.
  *

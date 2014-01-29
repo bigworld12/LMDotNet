@@ -46,5 +46,5 @@ void lmcurve( int n_par, double *par, int m_dat,
     data.f = f;
 
     lmmin( n_par, par, m_dat, (const void*) &data,
-           lmcurve_evaluate, control, status );
+           lmcurve_evaluate, control, status, &malloc_array_allocator );
 }

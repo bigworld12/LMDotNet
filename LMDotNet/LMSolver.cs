@@ -113,16 +113,9 @@ namespace LMDotNet
             this.MaxIterations = patience;
             this.ScaleDiagonal = scaleDiagonal;
             this.VerboseOutput = verbose;
-        }
+        }               
 
-        /// <summary>
-        /// Solve a system of nonlinear equations (in a least-squares sense,
-        /// i.e. by fitting parameters to minimize a residue vector)
-        /// </summary>
-        /// <param name="fun">The system to solve</param>
-        /// <param name="initialGuess">Initial guess for the free variables</param>
-        /// <returns>Optimized parameters</returns>
-        public OptimizationResult Solve(LMDelegate fun, double[] initialGuess) {
+        private OptimizationResult SolveNative(LMDelegate fun, double[] parameters, DoubleArrayAllocatorDelegate allocate) {
             LMControlStruct ctrl = new LMControlStruct {
                 ftol = this.Ftol,
                 gtol = this.Gtol,
@@ -132,49 +125,58 @@ namespace LMDotNet
                 msgfile = IntPtr.Zero,
                 m_maxpri = -1,
                 n_maxpri = -1,
-                scale_diag = this.ScaleDiagonal? 1 : 0,
+                scale_diag = this.ScaleDiagonal ? 1 : 0,
                 stepbound = this.InitialStepbound,
                 verbosity = this.VerboseOutput ? 3 : 0
             };
-            
-            double[] optimizedPars = new double[initialGuess.Length];
-            initialGuess.CopyTo(optimizedPars, 0);
-        
+
             LMStatusStruct stat = new LMStatusStruct();
             // call native lmmin from lmfit package
-            LMFit.lmmin(initialGuess.Length, optimizedPars, initialGuess.Length, IntPtr.Zero, fun, ref ctrl, ref stat);
-
+            LMFit.lmmin(parameters.Length, parameters, parameters.Length, IntPtr.Zero, fun, ref ctrl, ref stat, allocate);
+        
             OptimizationResult result = new OptimizationResult {
                 errorNorm = stat.fnorm,
                 iterations = stat.nfev,
-                optimizedParameters = optimizedPars,
+                optimizedParameters = parameters,
                 message = LMSolver.outcomeMessages[stat.outcome],
-                terminatedByUserRequest = stat.userbreak > 0? true : false,
+                terminatedByUserRequest = stat.userbreak > 0 ? true : false,
                 outcome = (SolverStatus)stat.outcome
             };
 
             return result;
         }
+        
+        /// <summary>
+        /// Solve a system of nonlinear equations (in a least-squares sense,
+        /// i.e. by fitting parameters to minimize a residue vector)
+        /// </summary>
+        /// <param name="fun">Updates the residuals based on the current parameters;
+        /// first parameter: current parameter vector (IN);
+        /// second parameter: residuals (OUT)</param>
+        /// <param name="initialGuess">Initial guess for the free variables</param>
+        /// <returns>Optimized parameters and status</returns>
+        public OptimizationResult Solve(Action<double[], double[]> fun, double[] initialGuess) {            
+            var allocator = new PinnedManagedArrayAllocator<double>();
+            // optimizedPars must be allocated via allocator, because
+            // the first callback-call pases a pointer to this array
+            // in the "par" parameter
+            var pOptimizedPars = allocator.AllocateArray(initialGuess.Length);
+            double[] optimizedPars = allocator.GetManagedArray(pOptimizedPars);
+            initialGuess.CopyTo(optimizedPars, 0);           
 
-        public OptimizationResult Solve(Func<double[], double[]> fun, double[] initialGuess) {
-            var parameters = new double[initialGuess.Length];
-            LMDelegate nativeFun = (par, m_dat, data, fvec, userbreak) => {                
-                Marshal.Copy(par, parameters, 0, parameters.Length);
-                var residuals = fun(parameters);
-                Marshal.Copy(residuals, 0, fvec, residuals.Length);
-            };
-            return Solve(nativeFun, initialGuess);
-        }
-
-        public OptimizationResult Solve(Action<double[], double[]> fun, double[] initialGuess) {
-            var residuals = new double[initialGuess.Length];
-            var parameters = new double[initialGuess.Length];
             LMDelegate nativeFun = (par, m_dat, data, fvec, userbreak) => {
-                Marshal.Copy(par, parameters, 0, parameters.Length);
+                var parameters = allocator.GetManagedArray(par);
+                var residuals = allocator.GetManagedArray(fvec);
                 fun(parameters, residuals);
-                Marshal.Copy(residuals, 0, fvec, residuals.Length);
             };
-            return Solve(nativeFun, initialGuess);
+
+            var result = SolveNative(nativeFun, optimizedPars, allocator.AllocateArray);
+            
+            // managed arrays allocated by lmmin may be freed starting from here
+            // (if not referenced anymore)
+            GC.KeepAlive(allocator);
+
+            return result;
         }
     }
 }

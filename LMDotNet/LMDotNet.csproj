@@ -50,6 +50,8 @@
     <Compile Include="Native\LMControlStruct.cs" />
     <Compile Include="Native\LMFit.cs" />
     <Compile Include="Native\LMStatusStruct.cs" />
+    <Compile Include="Native\NativeDelegates.cs" />
+    <Compile Include="Native\PinnedManagedArrayAllocator.cs" />
     <Compile Include="OptimizationResult.cs" />
     <Compile Include="SolverStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
