@@ -1,5 +1,4 @@
-# LMDotNet
-## Levenberg-Marquardt algorithm (LMA) for .NET
+# LM.NET — Levenberg-Marquardt algorithm (LMA) for .NET
 
 LMDotNet provides an implementation of the Levenberg-Marquardt algorithm (LMA) for solving non-linear least-squares problems, e.g. for curve fitting (regression) or solving non-linear systems (in a least-squares sense).
 
