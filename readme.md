@@ -1,4 +1,4 @@
 LMDotNet
 ========
 
-LMDotNet provides a thin wrapper around the C-based lmfit library.
+a thin wrapper around the C-based Levenberg-Marquardt optimization/fitting/solving library lmfit
