@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace LMDotNet.Native
 {
+    /// <summary>
+    /// Contains the status of the optimization process
+    /// (corresponds to lm_status_struct)
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct LMStatusStruct
+    struct LMStatusStruct
     {
         public double fnorm;     /* norm of the residue vector fvec. */
         public int nfev;         /* actual number of iterations. */

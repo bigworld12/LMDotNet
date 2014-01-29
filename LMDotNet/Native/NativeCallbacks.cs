@@ -5,8 +5,16 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LMDotNet
+namespace LMDotNet.Native
 {
+    /// <summary>
+    /// Signature of the allocator passed into LMFit.lmmin
+    /// </summary>
+    /// <param name="count">Number of bytes to allocate</param>
+    /// <returns>Pointer to the base address</returns>
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    delegate IntPtr AllocaterDelegate(int count);
+    
     /// <summary>
     /// Signature of the user-defined equation (system) that 
     /// is to be evaluated
@@ -17,5 +25,5 @@ namespace LMDotNet
     /// <param name="fvec">[Out] Residue vector resulting from evaluating the system using the parameters in par (double*)</param>
     /// <param name="userbreak">[Out] Request termination if *userbreak == 1 (int*) (usually 0)</param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void LMDelegate([In] IntPtr par, int m_dat, [In] IntPtr data, [Out] IntPtr fvec, [Out] IntPtr userbreak);
+    delegate void LMDelegate([In] IntPtr par, int m_dat, [In] IntPtr data, [Out] IntPtr fvec, [Out] IntPtr userbreak);
 }

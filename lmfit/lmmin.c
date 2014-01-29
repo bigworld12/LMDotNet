@@ -126,7 +126,7 @@ void lmmin( int n, double *x, int m, const void *data,
             void (*evaluate) (const double *par, int m_dat, const void *data,
                               double *fvec, int *userbreak),
             const lm_control_struct *C, lm_status_struct *S,
-            double_array_allocator_t alloc_dp_array)
+            double_array_allocator_t alloc_dp_array) // if called from LMDotNet: an instance of PinnedManagedArrayAllocator<double>
 {
     double *fvec, *diag, *fjac, *qtf, *wa1, *wa2, *wa3, *wf;
     int *ipvt;

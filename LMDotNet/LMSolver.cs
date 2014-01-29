@@ -115,7 +115,7 @@ namespace LMDotNet
             this.VerboseOutput = verbose;
         }               
 
-        private OptimizationResult SolveNative(LMDelegate fun, double[] parameters, DoubleArrayAllocatorDelegate allocate) {
+        private OptimizationResult SolveNative(LMDelegate fun, double[] parameters, AllocaterDelegate allocate) {
             LMControlStruct ctrl = new LMControlStruct {
                 ftol = this.Ftol,
                 gtol = this.Gtol,

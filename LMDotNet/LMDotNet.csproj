@@ -45,12 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LMDelegate.cs" />
     <Compile Include="LMSolver.cs" />
     <Compile Include="Native\LMControlStruct.cs" />
     <Compile Include="Native\LMFit.cs" />
     <Compile Include="Native\LMStatusStruct.cs" />
-    <Compile Include="Native\NativeDelegates.cs" />
+    <Compile Include="Native\NativeCallbacks.cs" />
     <Compile Include="Native\PinnedManagedArrayAllocator.cs" />
     <Compile Include="OptimizationResult.cs" />
     <Compile Include="SolverStatus.cs" />

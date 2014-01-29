@@ -7,7 +7,6 @@ using LMDotNet;
 
 namespace LMDotNet.CSharpTest
 {
-
     class Program
     {
         // demo: intersect parabola with unit circle
@@ -27,7 +26,7 @@ namespace LMDotNet.CSharpTest
             var res1 = lmaSolver.Solve(Program.IntersectUnitCircleParabola, new[] { 1.0, 1.0 });
             // second solution: start at (-1.0, 1.0)
             var res2 = lmaSolver.Solve(Program.IntersectUnitCircleParabola, new[] { -1.0, 1.0 });
-
+            
             Console.WriteLine();            
             Console.WriteLine("=============================================================");
             if (res1.outcome == SolverStatus.ConvergedBoth ||

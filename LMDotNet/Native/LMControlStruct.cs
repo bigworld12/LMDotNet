@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace LMDotNet.Native
 {
+    /// <summary>
+    /// Controls the LMA solver options of LMFit.lmmin
+    /// (corresponds lm_control_struct from lmfit)
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct LMControlStruct
+    struct LMControlStruct
     {
         public double ftol;      /* Relative error desired in the sum of squares.
                          Termination occurs when both the actual and
