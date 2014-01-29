@@ -166,7 +166,7 @@ namespace LMDotNet
             initialGuess.CopyTo(optimizedPars, 0);           
                         
             var result = SolveNative(
-                // translate Action<double[],double[]> to LMDelegate
+                // translate Action<double[], double[]> to LMDelegate
                 (par, m_dat, data, fvec, userbreak) => fun(allocator[par], allocator[fvec]),
                 optimizedPars, 
                 allocator.AllocateArray);
