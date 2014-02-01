@@ -45,7 +45,27 @@ namespace LMDotNet.CSharpTest
                 r[1] = p[1] - p[0] * p[0]; },
                 new[] { 1.0, 1.0 });                        
             Console.WriteLine("=== Lambda as callback ======================================");
-            Console.WriteLine("1st solution: x = {0}, y = {1}", res3.optimizedParameters[0], res3.optimizedParameters[1]);            
+            Console.WriteLine("1st solution: x = {0}, y = {1}", res3.optimizedParameters[0], res3.optimizedParameters[1]);
+
+            ///////////// 2nd example ////////////
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("=== 2nd Example ======================================");
+            
+            var res4 = lmaSolver.Solve((p, r) => 
+            { 
+                r[0] = p[1] + p[0] * p[0] - 6.0;   // y = -x² + 6
+                r[1] = p[1] +  2.0 * p[0] + 2.0;   // y = -2x - 2
+            }, new[] { 0.0, 0.0 });
+            
+            var res5 = lmaSolver.Solve((p, r) =>
+            { 
+                r[0] = p[1] + p[0] * p[0] - 6.0;
+                r[1] = p[1] +  2.0 * p[0] + 2.0; 
+            },  new[] { 10.0, 0.0 });            
+
+            Console.WriteLine("Solution 1: x = {0}, y = {1}", res4.optimizedParameters[0], res4.optimizedParameters[1]);
+            Console.WriteLine("Solution 2: x = {0}, y = {1}", res5.optimizedParameters[0], res5.optimizedParameters[1]);   
         }
     }
 }
