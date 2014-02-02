@@ -118,6 +118,11 @@ double* __stdcall malloc_array_allocator(int length) {
     return (double *)malloc(length * sizeof(double));
 }
 
+// default native deallocator
+void* __stdcall free_deallocator(void* pBase) {
+    free(pBase);
+}
+
 /*****************************************************************************/
 /*  lmmin (main minimization routine)                                        */
 /*****************************************************************************/
@@ -126,7 +131,8 @@ void lmmin( int n, double *x, int m, const void *data,
             void (*evaluate) (const double *par, int m_dat, const void *data,
                               double *fvec, int *userbreak),
             const lm_control_struct *C, lm_status_struct *S,
-            double_array_allocator_t alloc_dp_array) // if called from LMDotNet: an instance of PinnedManagedArrayAllocator<double>
+            double_array_allocator_t alloc_dp_array, // if called from LMDotNet: an instance of PinnedManagedArrayAllocator<double>
+            deallocator_t dealloc) 
 {
     double *fvec, *diag, *fjac, *qtf, *wa1, *wa2, *wa3, *wf;
     int *ipvt;
@@ -195,13 +201,13 @@ void lmmin( int n, double *x, int m, const void *data,
 /***  Allocate work space.  ***/
 
     if ( (fvec = alloc_dp_array(m)) == NULL ||
-         (diag = alloc_dp_array(n)) == NULL ||
-         (qtf  = alloc_dp_array(n)) == NULL ||
-         (fjac = alloc_dp_array(n * m)) == NULL ||
-         (wa1  = alloc_dp_array(n)) == NULL ||
+         (diag = malloc(n * sizeof(double))) == NULL ||
+         (qtf  = malloc(n * sizeof(double))) == NULL ||
+         (fjac = malloc(n * m * sizeof(double))) == NULL ||
+         (wa1 =  malloc(n * sizeof(double))) == NULL ||
          (wa2  = alloc_dp_array(n)) == NULL ||
-         (wa3  = alloc_dp_array(n)) == NULL ||
-         (wf  = alloc_dp_array(m)) == NULL ||
+         (wa3 =  malloc(n * sizeof(double))) == NULL ||
+         (wf  =  alloc_dp_array(m)) == NULL ||
          (ipvt = (int *)    malloc(n * sizeof(int)   )) == NULL    ) {
         S->outcome = 9;
         return;
@@ -508,17 +514,17 @@ terminate:
     if ( S->userbreak ) /* user-requested break */
         S->outcome = 11;
 
-/***  Deallocate the workspace.  ***/
-    /*free(fvec);
+/***  Deallocate the workspace.  ***/    
     free(diag);
     free(qtf);
     free(fjac);
     free(wa1);
-    free(wa2);
-    free(wa3);
-    free(wf);*/ // allocated on managed heap
     free(ipvt);
-
+    free(wa3);
+    // allocated on managed heap, if lmmin was called from LM.NET
+    dealloc(fvec);
+    dealloc(wa2);
+    dealloc(wf);
 } /*** lmmin. ***/
 
 

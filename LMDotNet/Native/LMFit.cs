@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LMDotNet.Native
 {
+    /// <summary>
+    /// APIs of lmfit
+    /// </summary>
     static class LMFit
     {
         /// <summary>
@@ -21,6 +24,9 @@ namespace LMDotNet.Native
         /// <param name="status">Result/status of the optimzation process</param>
         /// <param name="arrayAllocator">Allocator to use for allocating arrays</param>
         [DllImport("lmfit.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void lmmin(int n_par, double[] par, int m_dat, IntPtr data, LMDelegate evaluate, ref LMControlStruct control, ref LMStatusStruct status, AllocaterDelegate arrayAllocator);        
+        internal static extern void lmmin(
+            int n_par, double[] par, int m_dat, IntPtr data, LMDelegate evaluate, 
+            ref LMControlStruct control, ref LMStatusStruct status, 
+            AllocaterDelegate arrayAllocator, DeallocatorDelegate arrayDeallocator);        
     }
 }

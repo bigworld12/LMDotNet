@@ -14,7 +14,14 @@ namespace LMDotNet.Native
     /// <returns>Pointer to the base address</returns>
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     delegate IntPtr AllocaterDelegate(int count);
-    
+
+    /// <summary>
+    /// Signature of the deallocator ("free") passed into LMFit.lmmin
+    /// </summary>
+    /// <param name="ptr">Managed array to "free" (unpin)</param>
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    delegate void DeallocatorDelegate([In] IntPtr ptr);
+
     /// <summary>
     /// Signature of the user-defined equation (system) that 
     /// is to be evaluated

@@ -115,7 +115,10 @@ namespace LMDotNet
             this.VerboseOutput = verbose;
         }               
 
-        private OptimizationResult SolveNative(LMDelegate fun, double[] parameters, AllocaterDelegate allocate) {
+        private OptimizationResult SolveNative(
+            LMDelegate fun, double[] parameters, 
+            AllocaterDelegate allocate, DeallocatorDelegate deallocate) 
+        {
             LMControlStruct ctrl = new LMControlStruct {
                 ftol = this.Ftol,
                 gtol = this.Gtol,
@@ -132,7 +135,7 @@ namespace LMDotNet
 
             LMStatusStruct stat = new LMStatusStruct();
             // call native lmmin from lmfit package
-            LMFit.lmmin(parameters.Length, parameters, parameters.Length, IntPtr.Zero, fun, ref ctrl, ref stat, allocate);
+            LMFit.lmmin(parameters.Length, parameters, parameters.Length, IntPtr.Zero, fun, ref ctrl, ref stat, allocate, deallocate);
         
             OptimizationResult result = new OptimizationResult {
                 errorNorm = stat.fnorm,
@@ -156,12 +159,12 @@ namespace LMDotNet
         /// <param name="initialGuess">Initial guess for the free variables</param>
         /// <returns>Optimized parameters and status</returns>
         public OptimizationResult Solve(Action<double[], double[]> fun, double[] initialGuess) {            
-            var allocator = new PinnedManagedArrayAllocator<double>();
+            var allocator = new PinnedArrayAllocator<double>();
 
             // optimizedPars must be allocated via allocator, because
             // the first callback-call (== call to nativeFun) pases a 
             // pointer to optimizedPars in the "par" parameter
-            var pOptimizedPars = allocator.AllocateArray(initialGuess.Length);
+            var pOptimizedPars = allocator.AllocatePinnedArray(initialGuess.Length);
             double[] optimizedPars = allocator[pOptimizedPars];
             initialGuess.CopyTo(optimizedPars, 0);           
                         
@@ -169,10 +172,12 @@ namespace LMDotNet
                 // translate Action<double[], double[]> to LMDelegate
                 (par, m_dat, data, fvec, userbreak) => fun(allocator[par], allocator[fvec]),
                 optimizedPars, 
-                allocator.AllocateArray);
-            
-            // managed arrays allocated by lmmin may be freed starting from here
-            // (if not referenced anymore)
+                allocator.AllocatePinnedArray,
+                allocator.UnpinArray);
+
+            // pinned managed arrays allocated by lmmin may be garbage collected 
+            // starting from here (if not referenced anymore)
+            allocator.UnpinArray(pOptimizedPars);            
             GC.KeepAlive(allocator);
 
             return result;
