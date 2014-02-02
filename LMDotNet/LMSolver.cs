@@ -117,7 +117,8 @@ namespace LMDotNet
 
         private OptimizationResult SolveNative(
             LMDelegate fun, double[] parameters, 
-            AllocaterDelegate allocate, DeallocatorDelegate deallocate) 
+            AllocaterDelegate allocate, DeallocatorDelegate deallocate,
+            int mData)
         {
             LMControlStruct ctrl = new LMControlStruct {
                 ftol = this.Ftol,
@@ -135,8 +136,8 @@ namespace LMDotNet
 
             LMStatusStruct stat = new LMStatusStruct();
             // call native lmmin from lmfit package
-            LMFit.lmmin(parameters.Length, parameters, parameters.Length, IntPtr.Zero, fun, ref ctrl, ref stat, allocate, deallocate);
-        
+            LMFit.lmmin(parameters.Length, parameters, mData, IntPtr.Zero, fun, ref ctrl, ref stat, allocate, deallocate);
+
             OptimizationResult result = new OptimizationResult {
                 errorNorm = stat.fnorm,
                 iterations = stat.nfev,
@@ -149,16 +150,18 @@ namespace LMDotNet
             return result;
         }
         
-        /// <summary>
-        /// Solve a system of nonlinear equations (in a least-squares sense,
-        /// i.e. by fitting parameters to minimize a residue vector)
-        /// </summary>
-        /// <param name="fun">Updates the residuals based on the current parameters;
-        /// first parameter: current parameter vector (IN);
-        /// second parameter: residuals (OUT)</param>
-        /// <param name="initialGuess">Initial guess for the free variables</param>
-        /// <returns>Optimized parameters and status</returns>
-        public OptimizationResult Solve(Action<double[], double[]> fun, double[] initialGuess) {            
+       /// <summary>
+       /// Determines a parameter vector that minimizes the sum of squared elements 
+       /// of a residue vector that is computed by a user-supplied function fun. 
+       /// </summary>
+       /// <param name="fun">Updates the residuals based on the current parameters;
+       /// first parameter: current parameter vector (IN; length = length(initialGuess));
+       /// second parameter: residuals (OUT; length = nDataPoints)</param>
+       /// <param name="initialGuess">Initial guess for the free variables; length determines
+       /// the number of free variables</param>
+       /// <param name="nDataPoints">Length of the residuals vector == number of datapoints == number of equations</param>
+       /// <returns>Optimized parameters and status</returns>
+       public OptimizationResult Minimize(Action<double[], double[]> fun, double[] initialGuess, int nDataPoints) {
             var allocator = new PinnedArrayAllocator<double>();
 
             // optimizedPars must be allocated via allocator, because
@@ -166,21 +169,75 @@ namespace LMDotNet
             // pointer to optimizedPars in the "par" parameter
             var pOptimizedPars = allocator.AllocatePinnedArray(initialGuess.Length);
             double[] optimizedPars = allocator[pOptimizedPars];
-            initialGuess.CopyTo(optimizedPars, 0);           
-                        
+            initialGuess.CopyTo(optimizedPars, 0);
+
             var result = SolveNative(
                 // translate Action<double[], double[]> to LMDelegate
-                (par, m_dat, data, fvec, userbreak) => fun(allocator[par], allocator[fvec]),
-                optimizedPars, 
+                (par, m_dat, dataPtr, fvec, userbreak) => fun(allocator[par], allocator[fvec]),
+                optimizedPars,
                 allocator.AllocatePinnedArray,
-                allocator.UnpinArray);
+                allocator.UnpinArray, 
+                nDataPoints);
 
             // pinned managed arrays allocated by lmmin may be garbage collected 
             // starting from here (if not referenced anymore)
-            allocator.UnpinArray(pOptimizedPars);            
+            allocator.UnpinArray(pOptimizedPars);
             GC.KeepAlive(allocator);
 
             return result;
         }
+
+        /// <summary>
+        /// Solve a system of nonlinear equations (in a least-squares sense,
+        /// i.e. by fitting parameters to minimize a residue vector)
+        /// </summary>
+        /// <param name="fun">Updates the residuals based on the current parameters;
+        /// first parameter: current parameter vector (IN; length = length(initialGuess));
+        /// second parameter: residuals (OUT; length = length(initialGuess))</param>
+        /// <param name="initialGuess">Initial guess for the free variables; length determines
+        /// the number of free variables and the number of equations, and thus, residues</param>
+        /// <returns>Optimized parameters and status</returns>
+        public OptimizationResult Solve(Action<double[], double[]> fun, double[] initialGuess) {
+            return Minimize(fun, initialGuess, initialGuess.Length);
+        }
+
+        // convenient 1D-curve fitting à la lmcurve; user only needs to
+        // supply samples and model function;
+        // don't wrap lmcurve, but call SolveNative/MinimizeSumOfSquares/lmmin
+        public OptimizationResult FitCurve(Func<double, double[], double> model, double[] initialGuess, Tuple<double, double>[] samples) {            
+            throw new NotImplementedException();
+        }
+        /*typedef struct {
+            const double *t;
+            const double *y;
+            double (*f) (double t, const double *par);
+        } lmcurve_data_struct;
+
+        void lmcurve_evaluate( const double *par, int m_dat, const void *data,
+                               double *fvec, int *info )
+        {
+            int i;
+            for ( i = 0; i < m_dat; i++ )
+                fvec[i] =
+                    ((lmcurve_data_struct*)data)->y[i] -
+                    ((lmcurve_data_struct*)data)->f(
+                        ((lmcurve_data_struct*)data)->t[i], par );
+        }
+
+        void lmcurve( int n_par, double *par, int m_dat, 
+                      const double *t, const double *y,
+                      double (*f)( double t, const double *par ),
+                      const lm_control_struct *control,
+                      lm_status_struct *status )
+        {
+            lmcurve_data_struct data;
+            data.t = t;
+            data.y = y;
+            data.f = f;
+
+            lmmin( n_par, par, m_dat, (const void*) &data,
+                   lmcurve_evaluate, control, status, 
+                   &malloc_array_allocator, &free_deallocator );
+        }*/
     }
 }

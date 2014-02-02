@@ -18,7 +18,7 @@ namespace LMDotNet.CSharpTest
             // standard parabola  y = x^2
             residuals[1] = parameters[1] - parameters[0] * parameters[0];                  
         }
-
+        
         static void Main(string[] args) {
             var lmaSolver = new LMSolver(verbose: true);
 
@@ -35,7 +35,6 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("2nd solution: x = {0}, y = {1}", res2.optimizedParameters[0], res2.optimizedParameters[1]);
         
             Console.WriteLine();
-            Console.WriteLine();
 
             ///////////// Alternative: use a lambda expression: ////////////
             lmaSolver.VerboseOutput = false;
@@ -48,7 +47,6 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("1st solution: x = {0}, y = {1}", res3.optimizedParameters[0], res3.optimizedParameters[1]);
 
             ///////////// 2nd example ////////////
-            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("=== 2nd Example ======================================");
             
@@ -65,7 +63,28 @@ namespace LMDotNet.CSharpTest
             },  new[] { 10.0, 0.0 });            
 
             Console.WriteLine("Solution 1: x = {0}, y = {1}", res4.optimizedParameters[0], res4.optimizedParameters[1]);
-            Console.WriteLine("Solution 2: x = {0}, y = {1}", res5.optimizedParameters[0], res5.optimizedParameters[1]);   
+            Console.WriteLine("Solution 2: x = {0}, y = {1}", res5.optimizedParameters[0], res5.optimizedParameters[1]);
+
+            ///////////// Generic least-squares minimization ////////////
+            // Example 1: surface fitting
+
+            // grid points
+            var xs = new[] { -1.0, -1.0,  1.0,  1.0 };
+            var zs = new[] { -1.0,  1.0, -1.0,  1.0 };
+            // data points
+            var ys = new[] {  0.0,  1.0,  1.0,  2.0 };
+
+            var fit = lmaSolver.Minimize((p, r) => {
+                for (int i = 0; i < ys.Length; ++i)
+                    // residual for data point i, 
+                    // assuming a model y = p0 + p1 * x + p2 * z
+                    r[i] = ys[i] - (p[0] + p[1] * xs[i] + p[2] * zs[i]); }, 
+                new[] { 0.0, 0.0, 0.0 }, 
+                ys.Length);
+
+            Console.WriteLine();
+            Console.WriteLine("=== Fit surface ======================================");
+            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fit.optimizedParameters[0], fit.optimizedParameters[1], fit.optimizedParameters[2]);
         }
     }
 }
