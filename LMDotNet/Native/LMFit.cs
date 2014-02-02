@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LMDotNet.Native
 {
@@ -13,7 +9,9 @@ namespace LMDotNet.Native
     static class LMFit
     {
         /// <summary>
-        /// Signature of the lmmin function, the core API of lmfit
+        /// Signature of the lmmin function, the core API of lmfit: performs
+        /// generic non-linear least-squares minimization using the 
+        /// Levenberg-Marquardt algorithm
         /// </summary>
         /// <param name="n_par">Number of free variables/parameters</param>
         /// <param name="par">Initial guess for the parameters; contains the optimized parameters afterwards</param>

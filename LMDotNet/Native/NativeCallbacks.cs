@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LMDotNet.Native
 {
     /// <summary>
     /// Signature of the allocator passed into LMFit.lmmin
     /// </summary>
-    /// <param name="count">Number of bytes to allocate</param>
+    /// <param name="count">Number of doubles to allocate</param>
     /// <returns>Pointer to the base address</returns>
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     delegate IntPtr AllocaterDelegate(int count);
@@ -20,7 +16,7 @@ namespace LMDotNet.Native
     /// </summary>
     /// <param name="ptr">Managed array to "free" (unpin)</param>
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    delegate void DeallocatorDelegate([In] IntPtr ptr);
+    delegate void DeallocatorDelegate(IntPtr ptr);
 
     /// <summary>
     /// Signature of the user-defined equation (system) that 
@@ -32,5 +28,5 @@ namespace LMDotNet.Native
     /// <param name="fvec">[Out] Residue vector resulting from evaluating the system using the parameters in par (double*)</param>
     /// <param name="userbreak">[Out] Request termination if *userbreak == 1 (int*) (usually 0)</param>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    delegate void LMDelegate([In] IntPtr par, int m_dat, [In] IntPtr data, [Out] IntPtr fvec, [Out] IntPtr userbreak);
+    delegate void LMDelegate(IntPtr par, int m_dat, IntPtr data, IntPtr fvec, IntPtr userbreak);
 }

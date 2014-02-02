@@ -66,7 +66,7 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("Solution 2: x = {0}, y = {1}", res5.optimizedParameters[0], res5.optimizedParameters[1]);
 
             ///////////// Generic least-squares minimization ////////////
-            // Example 1: surface fitting
+            // Example: surface fitting
 
             // grid points
             var xs = new[] { -1.0, -1.0,  1.0,  1.0 };
@@ -83,8 +83,29 @@ namespace LMDotNet.CSharpTest
                 ys.Length);
 
             Console.WriteLine();
-            Console.WriteLine("=== Fit surface ======================================");
+            Console.WriteLine("=== Fit surface via lmmin ============================");
             Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fit.optimizedParameters[0], fit.optimizedParameters[1], fit.optimizedParameters[2]);
+
+            ///////////// convenient 1D curve fitting ////////////
+            var rand = new Random();
+            var ts   = Enumerable.Range(0, 100).Select(i => i * 0.01).ToArray();
+            var sins = Enumerable.Range(0, 100).Select(i => 2.0 * Math.Sin(3.0 * ts[i] + 0.1) /*+ rand.NextDouble() * 0.02*/).ToArray();
+            
+            var sinFit = lmaSolver.FitCurve((x, p) => p[0] * Math.Sin(p[1] * x + p[2]), new[] { 1.0, 1.0, 1.0 }, ts, sins);
+            Console.WriteLine();
+            Console.WriteLine("=== Fit sine to noisy data ===========================");
+            Console.WriteLine("Fit: y = {0} sin({1} x + {2})", sinFit.optimizedParameters[0], sinFit.optimizedParameters[1], sinFit.optimizedParameters[2]);
+
+            ///////////// convenient 2D surface fitting ////////////
+            var surfsamples = Enumerable
+                .Range(0, ys.Length)
+                .Select(i => Tuple.Create(xs[i], zs[i], ys[i]))
+                .ToArray();
+            
+            var surfFit = lmaSolver.FitSurface((x, y, p) => p[0] + p[1] * x + p[2] * y, new[] { 0.0, 0.0, 0.0 }, xs, zs, ys);
+            Console.WriteLine();
+            Console.WriteLine("=== Fit surface ======================================");
+            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", surfFit.optimizedParameters[0], surfFit.optimizedParameters[1], surfFit.optimizedParameters[2]);
         }
     }
 }
