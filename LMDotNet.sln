@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet.CSharpTest", "LMDotNet.CSharpTest\LMDotNet.CSharpTest.csproj", "{20F7603D-0CDF-4FA5-98E8-BBFCB6F5524E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet.CSharpTest", "LMDo
 		{D4A228A4-2C3B-4E8C-B7C5-CB3C6C0AF53B} = {D4A228A4-2C3B-4E8C-B7C5-CB3C6C0AF53B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet", "LMDotNet\LMDotNet.csproj", "{D4A228A4-2C3B-4E8C-B7C5-CB3C6C0AF53B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet-451", "LMDotNet\LMDotNet-451.csproj", "{D4A228A4-2C3B-4E8C-B7C5-CB3C6C0AF53B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lmfit", "lmfit\lmfit.vcxproj", "{7B929D7C-7245-45DB-99D4-58A8853607D0}"
 EndProject
@@ -18,6 +18,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D79A35
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet-40", "LMDotNet-40\LMDotNet-40.csproj", "{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet-35", "LMDotNet-35\LMDotNet-35.csproj", "{F1CD7533-53D6-4251-9077-4955DC1ABBE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet-45", "LMDotNet-45\LMDotNet-45.csproj", "{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9DAABA48-F4D2-480F-B429-9E3C8AE714BB}"
+	ProjectSection(SolutionItems) = preProject
+		nuget\LMDotNet-x86.nuspec = nuget\LMDotNet-x86.nuspec
 	EndProjectSection
 EndProject
 Global
@@ -92,6 +103,48 @@ Global
 		{7B929D7C-7245-45DB-99D4-58A8853607D0}.Release|x64.Build.0 = Release|x64
 		{7B929D7C-7245-45DB-99D4-58A8853607D0}.Release|x86.ActiveCfg = Release|Win32
 		{7B929D7C-7245-45DB-99D4-58A8853607D0}.Release|x86.Build.0 = Release|Win32
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{8FC563D9-0901-4AEF-A881-2D30DF3A2FE1}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|x64.ActiveCfg = Release|Any CPU
+		{F1CD7533-53D6-4251-9077-4955DC1ABBE0}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

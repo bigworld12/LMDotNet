@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{20F7603D-0CDF-4FA5-98E8-BBFCB6F5524E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{F1CD7533-53D6-4251-9077-4955DC1ABBE0}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LMDotNet.CSharpTest</RootNamespace>
-    <AssemblyName>LMDotNet.CSharpTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <RootNamespace>LMDotNet</RootNamespace>
+    <AssemblyName>LMDotNet</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,49 +21,55 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LMDotNet\LMDotNet-451.csproj">
-      <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
-      <Name>LMDotNet-451</Name>
-    </ProjectReference>
+    <Compile Include="..\LMDotNet\LMSolver.cs">
+      <Link>LMSolver.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\Native\LMControlStruct.cs">
+      <Link>Native\LMControlStruct.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\Native\LMFit.cs">
+      <Link>Native\LMFit.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\Native\LMStatusStruct.cs">
+      <Link>Native\LMStatusStruct.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\Native\NativeCallbacks.cs">
+      <Link>Native\NativeCallbacks.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\Native\PinnedArrayAllocator.cs">
+      <Link>Native\PinnedArrayAllocator.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\OptimizationResult.cs">
+      <Link>OptimizationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\LMDotNet\SolverStatus.cs">
+      <Link>SolverStatus.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)lmfit\bin\Win32\$(Configuration)\lmfit.dll" "$(TargetDir)"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
