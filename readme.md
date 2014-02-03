@@ -2,7 +2,7 @@
 
 LM.NET provides an implementation of the Levenberg-Marquardt algorithm (LMA) for solving non-linear least-squares problems, e.g. for curve fitting (regression) or solving non-linear systems (in a least-squares sense).
 
-LM.NET is a light-weight wrapper around the existing LMA package [lmfit](http://apps.jcns.fz-juelich.de/doku/sc/lmfit) written in pure C, itself derived from the original Fortran implementation found in [MINPACK-1](http://www.netlib.org/minpack/). In the repository, the subdirectory lmfit contains a Visual C++ project that compiles lmfit as a DLL, which currently only exports the [lmmin API](http://apps.jcns.fz-juelich.de/man/lmmin.html). Note that due to its dependency on the native implementation, the resulting managed class library LMDotNet.dll is not platform agnostic anymore (e.g. x86 vs. x64).
+LM.NET is a light-weight wrapper around the existing LMA package [lmfit](http://apps.jcns.fz-juelich.de/doku/sc/lmfit) written in pure C, itself derived from the original Fortran implementation [lmdif.f](http://www.netlib.org/minpack/lmdif.f) found in [MINPACK-1](http://www.netlib.org/minpack/). In the repository, the subdirectory lmfit contains a Visual C++ project that compiles lmfit as a DLL, which currently only exports the [lmmin API](http://apps.jcns.fz-juelich.de/man/lmmin.html). Note that due to its dependency on the native implementation, the resulting managed class library LMDotNet.dll is not platform agnostic anymore (e.g. x86 vs. x64).
 
 ## Quickstart: Solving a system of non-linear equations
 
