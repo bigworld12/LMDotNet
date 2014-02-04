@@ -36,6 +36,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\LMDotNet.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
