@@ -23,7 +23,7 @@ The following example shows how to implement the [nls solving demo problem](http
         r[1] = p[1] - p[0] * p[0]; },           // parabola
         new[] { -1.0, 1.0 });                   // initial guess for (x, y)
     
-    // (x, y) pairs for which ||F(x)||_2 -> min
+    // (x, y) pairs for which the squared L2 norm of F -> min
     Console.WriteLine("1st solution: x = {0}, y = {1}", 
         res1.optimizedParameters[0], res1.optimizedParameters[1]);            
     Console.WriteLine("2nd solution: x = {0}, y = {1}", 
