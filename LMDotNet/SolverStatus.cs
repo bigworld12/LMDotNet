@@ -1,5 +1,8 @@
 ﻿namespace LMDotNet
 {
+    /// <summary>
+    /// Encodes possible result conditions for the LM solver
+    /// </summary>
     public enum SolverStatus
     {
         /// <summary>

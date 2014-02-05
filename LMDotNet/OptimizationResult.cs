@@ -1,5 +1,11 @@
 ﻿namespace LMDotNet
 {
+    /// <summary>
+    /// Information about the optimization outcome; if the
+    /// optimization procedure converged, optimizedParameters
+    /// contains the parameters, which minimize the user
+    /// supplied function.
+    /// </summary>
     public class OptimizationResult
     {
         /// <summary>

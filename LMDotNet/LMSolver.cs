@@ -4,6 +4,10 @@ using System.Diagnostics;
 
 namespace LMDotNet
 {
+    /// <summary>
+    /// Levenberg-Marquardt non-linear least squares solver
+    /// based on lmfit
+    /// </summary>
     public class LMSolver
     {
         /// <summary>Relative error desired in the sum of squares.
@@ -111,6 +115,15 @@ namespace LMDotNet
             this.VerboseOutput = verbose;
         }               
 
+        /// <summary>
+        /// Calls the native lmmin API from the lmfit package
+        /// </summary>
+        /// <param name="fun">The user supplied function to update the residue vector</param>
+        /// <param name="parameters">initial guess for the parameters</param>
+        /// <param name="allocate">Memory allocator</param>
+        /// <param name="deallocate">Memory deallocator</param>
+        /// <param name="mData">Number of data points == number of equations == length of the residue vector</param>
+        /// <returns>Optimization outcome and optimal paramters, if successful</returns>
         private OptimizationResult CallNativeSolver(
             LMDelegate fun, double[] parameters, 
             AllocaterDelegate allocate, DeallocatorDelegate deallocate,
@@ -149,18 +162,19 @@ namespace LMDotNet
         }
         
        /// <summary>
-       /// Determines the vector x that minimizes the L2-norm of a user-supplied
-       /// function fun, i.e. it determines x_opt = argmin ||fun(x)||_2
+       /// Determines the vector x that minimizes the squared L2-norm of a user-supplied
+       /// function f, i.e. it determines x_opt = argmin_x ||f(x)||²
        /// </summary>
-       /// <param name="fun">Evaluate the function(s) at the point x;<br/>
+       /// <param name="f">Evaluates the system at the point x;<br/>
        /// first parameter:  x    (IN;  length = length(initialGuess));
        /// second parameter: f(x) (OUT; length = nDataPoints)</param>
        /// <param name="x0">Initial guess for x_opt; length determines the length of x</param>
        /// <param name="nDataPoints">Length of f(x) 
-       /// == number of datapoints (regression) 
-       /// == number of equations (solving NLS)</param>
-       /// <returns>Optimum x_opt and solution status</returns>
-       public OptimizationResult Minimize(Action<double[], double[]> fun, double[] x0, int nDataPoints) {
+       /// == number of datapoints (for regression)        
+       /// == number of equations (for solving NLS)
+       /// == length of the residue vector; invariant: nDataPoints &gt;= length(x0)</param>
+       /// <returns>Optimum x_opt (if successful) and solution status</returns>
+       public OptimizationResult Minimize(Action<double[], double[]> f, double[] x0, int nDataPoints) {
             var allocator = new PinnedArrayAllocator<double>();
 
             // optimizedPars must be allocated via allocator, because
@@ -172,7 +186,7 @@ namespace LMDotNet
 
             var result = CallNativeSolver(
                 // translate Action<double[], double[]> to LMDelegate
-                (par, m_dat, dataPtr, fvec, userbreak) => fun(allocator[par], allocator[fvec]),
+                (par, m_dat, dataPtr, fvec, userbreak) => f(allocator[par], allocator[fvec]),
                 optimizedPars,
                 allocator.AllocatePinnedArray,
                 allocator.UnpinArray, 
@@ -187,22 +201,36 @@ namespace LMDotNet
         }
 
         /// <summary>
-        /// Solve a system of nonlinear equations (in a least-squares sense,
+        /// Solve a system of non-linear equations (in a least-squares sense,
         /// i.e. by optimizing parameters to minimize a residue vector)
         /// </summary>
-        /// <param name="fun">Updates the residuals based on the current parameters;
+        /// <param name="f">Computes the residuals based on the current parameters;
         /// first parameter: current parameter vector (IN; length = length(initialGuess));
         /// second parameter: residuals (OUT; length = length(initialGuess))</param>
         /// <param name="x0">Initial guess for the free variables; length determines
-        /// the number of free variables and the number of equations, and thus, residues</param>
+        /// the number of free variables and the number of equations, and thus, residuals</param>
         /// <returns>Optimized parameters and status</returns>
-        public OptimizationResult Solve(Action<double[], double[]> fun, double[] x0) {
-            return Minimize(fun, x0, x0.Length);
+        public OptimizationResult Solve(Action<double[], double[]> f, double[] x0) {
+            return Minimize(f, x0, x0.Length);
         }
 
-        // convenient 1D-curve fitting à la lmcurve; user only needs to
-        // supply (x, y) samples and a model function y_hat = f(x, params);        
-        public OptimizationResult FitCurve(Func<double, double[], double> model, double[] x0, double[] xs, double[] ys) {
+        /// <summary>
+        /// 1D-curve fitting (non-linear regression): optimize a parameter vector beta
+        /// for a model equation to minimize the sum of squared residuals, i.e.:
+        /// x: sample point, y: measured data, y': predicted value by the model;
+        /// Residual for datapoint i: eps_i = y_i - model(x_i, beta);
+        /// find beta_opt = argmin_beta ||eps_i||²
+        /// </summary>
+        /// <param name="model">Regression model to fit to the data points; 
+        /// first parameter: sample location x_i;
+        /// second parameter: parameter vector beta;
+        /// result: model prediction y' = model(x_i, beta)
+        /// </param>
+        /// <param name="beta0">Initial guess for the model parameter vector</param>
+        /// <param name="xs">sampling locations</param>
+        /// <param name="ys">samples (data points)</param>
+        /// <returns>Optimized model parameters and status</returns>
+        public OptimizationResult FitCurve(Func<double, double[], double> model, double[] beta0, double[] xs, double[] ys) {
             Debug.Assert(xs.Length == ys.Length);
 
             Action<double[], double[]> fun = (parameters, residuals) => {
@@ -210,10 +238,28 @@ namespace LMDotNet
                     residuals[i] = ys[i] - model(xs[i], parameters);
                 }
             };
-            return Minimize(fun, x0, xs.Length);
+            return Minimize(fun, beta0, xs.Length);
         }
 
-        public OptimizationResult FitSurface(Func<double, double, double[], double> model, double[] x0, double[] xs, double[] ys, double[] zs) {
+        /// <summary>
+        /// 2D-curve fitting (non-linear regression): optimize a parameter vector beta
+        /// for a model equation to minimize the sum of squared residuals, i.e.:
+        /// (x, y): sample point, z: measured data, z': predicted value by the model;
+        /// Residual for datapoint i: eps_i = z_i - model(x_i, y_i, beta);
+        /// find beta_opt = argmin_beta ||eps_i||²
+        /// </summary>
+        /// <param name="model">Regression model to fit to the data points; 
+        /// first parameter: sample location x_i;
+        /// second parameter: sample location y_i;
+        /// third parameter: parameter vector beta;
+        /// result: model prediction z' = model(x_i, y_i, beta)
+        /// </param>
+        /// <param name="beta0">Initial guess for the model parameter vector</param>
+        /// <param name="xs">First coordinate of the sampling locations</param>
+        /// <param name="ys">Second coordinate of the sampling locations</param>
+        /// <param name="zs">samples (data points) at (x, y) locations</param>
+        /// <returns>Optimized model parameters and status</returns>
+        public OptimizationResult FitSurface(Func<double, double, double[], double> model, double[] beta0, double[] xs, double[] ys, double[] zs) {
             Debug.Assert(xs.Length == ys.Length && ys.Length == zs.Length);
             
             Action<double[], double[]> fun = (parameters, residuals) => {
@@ -221,16 +267,32 @@ namespace LMDotNet
                     residuals[i] = zs[i] - model(xs[i], ys[i], parameters);
                 }
             };
-            return Minimize(fun, x0, xs.Length);
+            return Minimize(fun, beta0, xs.Length);
         }
 
-        public OptimizationResult Fit(Func<double[], double[], double> model, double[] x0, double[][] samplePoints, double[] samples) {
+        /// <summary>
+        /// nD-curve fitting (non-linear regression): optimize a parameter vector beta
+        /// for a model equation to minimize the sum of squared residuals, i.e.:
+        /// x: n-dim sample point, z: measured data, z': predicted value by the model;
+        /// Residual for datapoint i: eps_i = z_i - model(x_i, beta);
+        /// find beta_opt = argmin_beta ||eps_i||²
+        /// </summary>
+        /// <param name="model">Regression model to fit to the data points; 
+        /// first parameter: sample location x_i;
+        /// second parameter: parameter vector beta;
+        /// result: model prediction z' = model(x_i, beta)
+        /// </param>
+        /// <param name="beta0">Initial guess for the model parameter vector</param>
+        /// <param name="samplePoints">Sample locations; first index: coordinate; second index: sample number</param>
+        /// <param name="samples">Samples (data points) for each sample locations</param>
+        /// <returns>Optimized model parameters and status</returns>
+        public OptimizationResult Fit(Func<double[], double[], double> model, double[] beta0, double[][] samplePoints, double[] samples) {
             Action<double[], double[]> fun = (parameters, residuals) => {
                 for (int i = 0; i < samples.Length; ++i) {
                     residuals[i] = samples[i] - model(samplePoints[i], parameters);
                 }
             };
-            return Minimize(fun, x0, samples.Length);
+            return Minimize(fun, beta0, samples.Length);
         }
     }
 }
