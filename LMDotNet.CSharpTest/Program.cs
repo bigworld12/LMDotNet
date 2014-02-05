@@ -63,10 +63,8 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("Solve");
             Console.WriteLine("      y = -x² + 6 &&");
             Console.WriteLine("      y = -2x - 2");
-            Console.WriteLine("is true.");
             Console.WriteLine("1st solution: x = {0}, y = {1}", result1.optimizedParameters[0], result1.optimizedParameters[1]);
             Console.WriteLine("2nd solution: x = {0}, y = {1}", result2.optimizedParameters[0], result2.optimizedParameters[1]);
-            Console.WriteLine();
         }
 
         /// <summary>
@@ -101,7 +99,8 @@ namespace LMDotNet.CSharpTest
             }, new[] { 0.0, 0.0, 0.0 }, // initial guess for β'
             ys.Length);                 // number of samples
 
-            Console.WriteLine("Aim: fit a 2D regression model to the 4 samples");
+            Console.WriteLine();
+            Console.WriteLine("Aim: fit a linear 2D regression model to four samples");
             Console.WriteLine("   Model: y' = β0 + β1 * x + β2 * z");
             Console.WriteLine("   Regressors: x and z (grid points)");
             Console.WriteLine("   Unknown paramters: β0, β1, β2");
@@ -109,109 +108,53 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("   Parameter vector ε = [β0 β1 β2]^T");
             Console.WriteLine("   Residue: ε = y - y' = y - X β");
             Console.WriteLine("   Find β' = argmin_β sum(ε²)");
-            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fit.optimizedParameters[0], fit.optimizedParameters[1], fit.optimizedParameters[2]);
+            Console.WriteLine("Fit: y' = {0} + {1} x + {2} z", fit.optimizedParameters[0], fit.optimizedParameters[1], fit.optimizedParameters[2]);
         }
 
-        // demo: intersect parabola with unit circle
-        static void IntersectUnitCircleParabola(double[] parameters, double[] residuals) {
-            // evaluate non-linear system/residuals based on
-            // parameter vector p
-            // unit circle        x^2 + y^2 = 1
-            residuals[0] = parameters[0] * parameters[0] + parameters[1] * parameters[1] - 1.0;
-            // standard parabola  y = x^2
-            residuals[1] = parameters[1] - parameters[0] * parameters[0];                  
+        /// <summary>
+        /// Curve fitting using the Fit... convenience functions
+        /// </summary>
+        static void CurveFittingExamples() {
+            var solver = new LMSolver();
+
+            // 1st example: fit a model that is non-linear in its parameters
+            //      y' = p1 * sin(p2 * t + p3) + p4
+            // to some noisy data (t, y)
+            // => minimize sum((y - y')²)
+            //
+            // for generating some noise
+            var rand = new Random();
+            // sample points (here: equidistant)
+            var ts   = Enumerable.Range(0, 100).Select(i => i * 0.01).ToArray();
+            // signal: "measured" values at sample points
+            var sins = Enumerable.Range(0, 100)
+                .Select(i => 2.0 * Math.Sin(3.0 * ts[i] + 0.25) + rand.NextDouble() * 0.02)
+                .ToArray();
+            // FitCurve evaluates the model p[0] * Math.Sin(p[1] * t + p[2]) + p[3]
+            // for each t and computes the residual based on the corresponding y value
+            var fit1D = solver.FitCurve((t, p) => p[0] * Math.Sin(p[1] * t + p[2]) + p[3], new[] { 1.0, 1.0, 1.0, 1.0 }, ts, sins);
+            Console.WriteLine();
+            Console.WriteLine("Aim: fit a sine wave to noisy data");
+            Console.WriteLine("Fit: y' = {0} sin({1} x + {2}) + {3}", fit1D.optimizedParameters[0], fit1D.optimizedParameters[1], fit1D.optimizedParameters[2], fit1D.optimizedParameters[3]);
+
+            // 2nd example: fit a linear plane to some sample points 
+            // (cf. GenericMinimizationExamples for doing the same with
+            // the generic Minimization API)
+            // grid points
+            var xs = new[] { -1.0, -1.0, 1.0, 1.0 };
+            var zs = new[] { -1.0, 1.0, -1.0, 1.0 };
+            // data points/samples
+            var ys = new[] { 0.0, 1.0, 1.0, 2.0 };            
+            var fitPlane = solver.FitSurface((x, z, p) => p[0] + p[1] * x + p[2] * z, new[] { 0.0, 0.0, 0.0 }, xs, zs, ys);
+            Console.WriteLine();
+            Console.WriteLine("Aim: fit a plane to four data points");
+            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fitPlane.optimizedParameters[0], fitPlane.optimizedParameters[1], fitPlane.optimizedParameters[2]);
         }
         
         static void Main(string[] args) {
-            Program.SolveExamples();
+            Program.SolveExamples();            
+            Program.CurveFittingExamples();
             Program.GenericMinimizationExamples();
-
-            var lmaSolver = new LMSolver(verbose: true);
-
-            // First solution: start at (1.0, 1.0)
-            var res1 = lmaSolver.Solve(Program.IntersectUnitCircleParabola, new[] { 1.0, 1.0 });
-            // second solution: start at (-1.0, 1.0)
-            var res2 = lmaSolver.Solve(Program.IntersectUnitCircleParabola, new[] { -1.0, 1.0 });
-            
-            Console.WriteLine();            
-            Console.WriteLine("=== Static method as callback ===============================");
-            Console.WriteLine("1st solution: {0}", res1.message);
-            Console.WriteLine("1st solution: x = {0}, y = {1}", res1.optimizedParameters[0], res1.optimizedParameters[1]);
-            Console.WriteLine("2nd solution: {0}", res2.message);
-            Console.WriteLine("2nd solution: x = {0}, y = {1}", res2.optimizedParameters[0], res2.optimizedParameters[1]);
-        
-            Console.WriteLine();
-
-            ///////////// Alternative: use a lambda expression: ////////////
-            lmaSolver.VerboseOutput = false;
-
-            var res3 = lmaSolver.Solve((p, r) => {
-                r[0] = p[0] * p[0] + p[1] * p[1] - 1.0;            
-                r[1] = p[1] - p[0] * p[0]; },
-                new[] { 1.0, 1.0 });                        
-            Console.WriteLine("=== Lambda as callback ======================================");
-            Console.WriteLine("1st solution: x = {0}, y = {1}", res3.optimizedParameters[0], res3.optimizedParameters[1]);
-
-            ///////////// 2nd example ////////////
-            Console.WriteLine();
-            Console.WriteLine("=== 2nd Example ======================================");
-            
-            var res4 = lmaSolver.Solve((p, r) => 
-            { 
-                r[0] = p[1] + p[0] * p[0] - 6.0;   // y = -x² + 6
-                r[1] = p[1] +  2.0 * p[0] + 2.0;   // y = -2x - 2
-            }, new[] { 0.0, 0.0 });
-            
-            var res5 = lmaSolver.Solve((p, r) =>
-            { 
-                r[0] = p[1] + p[0] * p[0] - 6.0;
-                r[1] = p[1] +  2.0 * p[0] + 2.0; 
-            },  new[] { 10.0, 0.0 });            
-
-            Console.WriteLine("Solution 1: x = {0}, y = {1}", res4.optimizedParameters[0], res4.optimizedParameters[1]);
-            Console.WriteLine("Solution 2: x = {0}, y = {1}", res5.optimizedParameters[0], res5.optimizedParameters[1]);
-
-            ///////////// Generic least-squares minimization ////////////
-            // Example: surface fitting
-
-            // grid points
-            var xs = new[] { -1.0, -1.0,  1.0,  1.0 };
-            var zs = new[] { -1.0,  1.0, -1.0,  1.0 };
-            // data points
-            var ys = new[] {  0.0,  1.0,  1.0,  2.0 };
-
-            var fit = lmaSolver.Minimize((p, r) => {
-                for (int i = 0; i < ys.Length; ++i)
-                    // residual for data point i, 
-                    // assuming a model y = p0 + p1 * x + p2 * z
-                    r[i] = ys[i] - (p[0] + p[1] * xs[i] + p[2] * zs[i]); }, 
-                new[] { 0.0, 0.0, 0.0 }, 
-                ys.Length);
-
-            Console.WriteLine();
-            Console.WriteLine("=== Fit surface via lmmin ============================");
-            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fit.optimizedParameters[0], fit.optimizedParameters[1], fit.optimizedParameters[2]);
-
-            ///////////// convenient 1D curve fitting ////////////
-            var rand = new Random();
-            var ts   = Enumerable.Range(0, 100).Select(i => i * 0.01).ToArray();
-            var sins = Enumerable.Range(0, 100).Select(i => 2.0 * Math.Sin(3.0 * ts[i] + 0.1) /*+ rand.NextDouble() * 0.02*/).ToArray();
-            
-            var sinFit = lmaSolver.FitCurve((x, p) => p[0] * Math.Sin(p[1] * x + p[2]), new[] { 1.0, 1.0, 1.0 }, ts, sins);
-            Console.WriteLine();
-            Console.WriteLine("=== Fit sine to noisy data ===========================");
-            Console.WriteLine("Fit: y = {0} sin({1} x + {2})", sinFit.optimizedParameters[0], sinFit.optimizedParameters[1], sinFit.optimizedParameters[2]);
-
-            ///////////// convenient 2D surface fitting ////////////
-            var surfsamples = Enumerable
-                .Range(0, ys.Length)
-                .Select(i => Tuple.Create(xs[i], zs[i], ys[i]))
-                .ToArray();
-            
-            var surfFit = lmaSolver.FitSurface((x, y, p) => p[0] + p[1] * x + p[2] * y, new[] { 0.0, 0.0, 0.0 }, xs, zs, ys);
-            Console.WriteLine();
-            Console.WriteLine("=== Fit surface ======================================");
-            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", surfFit.optimizedParameters[0], surfFit.optimizedParameters[1], surfFit.optimizedParameters[2]);
         }
     }
 }
