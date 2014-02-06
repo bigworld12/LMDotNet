@@ -52,7 +52,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LMDotNet\LMDotNet-451.csproj">
+    <ProjectReference Include="..\LMDotNet-451\LMDotNet-451.csproj">
       <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
       <Name>LMDotNet-451</Name>
     </ProjectReference>
