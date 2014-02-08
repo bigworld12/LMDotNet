@@ -29,13 +29,13 @@
 __BEGIN_DECLS
 
 typedef double* (__stdcall *double_array_allocator_t)(int count);
-typedef void* (__stdcall *deallocator_t)(void* pBase);
+typedef void (__stdcall *deallocator_t)(void* pBase);
 
 // default native array allocator used in lmmin
 double* __stdcall malloc_array_allocator(int length);
 
 // default native deallocator
-void* __stdcall free_deallocator(void* pBase);
+void __stdcall free_deallocator(void* pBase);
 
 /* Levenberg-Marquardt minimization. */
 __declspec(dllexport) void lmmin(int n_par, double *par, int m_dat, const void *data,

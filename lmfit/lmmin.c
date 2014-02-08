@@ -119,7 +119,7 @@ double* __stdcall malloc_array_allocator(int length) {
 }
 
 // default native deallocator
-void* __stdcall free_deallocator(void* pBase) {
+void __stdcall free_deallocator(void* pBase) {
     free(pBase);
 }
 
