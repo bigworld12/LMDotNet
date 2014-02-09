@@ -1,2 +1,2 @@
 @echo off
-..\.nuget\NuGet pack LMDotNet-x86.nuspec
+..\.nuget\NuGet pack LMDotNet.nuspec

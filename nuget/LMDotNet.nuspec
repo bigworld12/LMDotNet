@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>LMDotNet</id>
+        <version>1.6.0-alpha1</version>
+        <title>LM.NET</title>
+        <authors>Frank Niemeyer</authors>
+        <owners>Frank Niemeyer</owners>
+        <licenseUrl>http://www.freebsd.org/copyright/freebsd-license.html</licenseUrl>
+        <projectUrl>https://bitbucket.org/frank_niemeyer/lmdotnet</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Levenberg-Marquardt non-linear least squares solver for .NET</description>
+        <releaseNotes>Works on both x86 and x64</releaseNotes>
+    </metadata>
+    <files>
+        <file src="..\lmfit\bin\Win32\Release\lmfit.dll" target="content\native-x86\lmfit.dll" />
+        <file src="..\lmfit\bin\Win32\Release\lmfit.pdb" target="content\native-x86\lmfit.pdb" />
+        <file src="..\lmfit\bin\x64\Release\lmfit.dll" target="content\native-x64\lmfit.dll" />
+        <file src="..\lmfit\bin\x64\Release\lmfit.pdb" target="content\native-x64\lmfit.pdb" />
+        <file src="..\LMDotNet-35\bin\Release\LMDotNet.dll" target="lib\net35\LMDotNet.dll" />
+        <file src="..\LMDotNet-40\bin\Release\LMDotNet.dll" target="lib\net40\LMDotNet.dll" />
+        <file src="..\LMDotNet-45\bin\Release\LMDotNet.dll" target="lib\net45\LMDotNet.dll" />
+        <file src="..\LMDotNet-451\bin\Release\LMDotNet.dll"    target="lib\net451\LMDotNet.dll" />
+        <file src="..\LMDotNet-35\bin\Release\LMDotNet.XML" target="lib\net35\LMDotNet.XML" />
+        <file src="..\LMDotNet-40\bin\Release\LMDotNet.XML" target="lib\net40\LMDotNet.XML" />
+        <file src="..\LMDotNet-45\bin\Release\LMDotNet.XML" target="lib\net45\LMDotNet.XML" />
+        <file src="..\LMDotNet-451\bin\Release\LMDotNet.XML"    target="lib\net451\LMDotNet.XML" />
+        <file src="..\LMDotNet-35\bin\Release\LMDotNet.pdb" target="lib\net35\LMDotNet.pdb" />
+        <file src="..\LMDotNet-40\bin\Release\LMDotNet.pdb" target="lib\net40\LMDotNet.pdb" />
+        <file src="..\LMDotNet-45\bin\Release\LMDotNet.pdb" target="lib\net45\LMDotNet.pdb" />
+        <file src="..\LMDotNet-451\bin\Release\LMDotNet.pdb"    target="lib\net451\LMDotNet.pdb" />
+        <file src="install.ps1" target="tools\install.ps1" />
+    </files>
+</package>
