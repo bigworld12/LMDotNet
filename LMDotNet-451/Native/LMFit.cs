@@ -19,10 +19,10 @@ namespace LMDotNet.Native
         static LMFit() {
             string dllDir;
             if (IntPtr.Size == 8) {
-                dllDir = "native-x64";
+                dllDir = "lmfit64";
             }
             else {
-                dllDir = "native-x86";
+                dllDir = "lmfit32";
             }
 
             lmfitDllHandle = LoadLibrary(Path.Combine(Path.Combine(Path.GetFullPath("."), dllDir), dllName));

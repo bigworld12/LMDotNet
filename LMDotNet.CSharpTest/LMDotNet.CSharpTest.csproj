@@ -65,10 +65,10 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)\native-x86"
-copy "$(SolutionDir)lmfit\bin\Win32\$(Configuration)\lmfit.dll" "$(TargetDir)\native-x86"
-mkdir "$(TargetDir)\native-x64"
-copy "$(SolutionDir)lmfit\bin\x64\$(Configuration)\lmfit.dll" "$(TargetDir)\native-x64"</PostBuildEvent>
+    <PostBuildEvent>mkdir "$(TargetDir)\lmfit32"
+copy "$(SolutionDir)lmfit\bin\Win32\$(Configuration)\lmfit.dll" "$(TargetDir)\lmfit32"
+mkdir "$(TargetDir)\lmfit64"
+copy "$(SolutionDir)lmfit\bin\x64\$(Configuration)\lmfit.dll" "$(TargetDir)\lmfit64"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
