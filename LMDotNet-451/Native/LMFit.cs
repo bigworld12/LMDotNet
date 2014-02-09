@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace LMDotNet.Native
@@ -8,6 +9,25 @@ namespace LMDotNet.Native
     /// </summary>
     static class LMFit
     {
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern IntPtr LoadLibrary(string lpFileName);
+
+        const string dllName = "lmfit.dll";
+
+        static IntPtr lmfitDllHandle;
+
+        static LMFit() {
+            string dllDir;
+            if (IntPtr.Size == 8) {
+                dllDir = "native-x64";
+            }
+            else {
+                dllDir = "native-x86";
+            }
+
+            lmfitDllHandle = LoadLibrary(Path.Combine(Path.Combine(Path.GetFullPath("."), dllDir), dllName));
+        }
+
         /// <summary>
         /// Signature of the lmmin function, the core API of lmfit: performs
         /// generic non-linear least-squares minimization using the 
@@ -22,7 +42,7 @@ namespace LMDotNet.Native
         /// <param name="status">Result/status of the optimzation process</param>
         /// <param name="arrayAllocator">Allocator to use for allocating arrays</param>
         /// <param name="arrayDeallocator">Deallocator for freeing memory allocated using arrayAllocator</param>
-        [DllImport("lmfit.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void lmmin(
             int n_par, double[] par, int m_dat, IntPtr data, LMDelegate evaluate, 
             ref LMControlStruct control, ref LMStatusStruct status, 
