@@ -60,14 +60,20 @@
     <Compile Include="..\LMDotNet-451\Native\NativeCallbacks.cs">
       <Link>Native\NativeCallbacks.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Native\PinnedArrayAllocator.cs">
-      <Link>Native\PinnedArrayAllocator.cs</Link>
+    <Compile Include="..\LMDotNet-451\Native\PinnedArrayPool.cs">
+      <Link>Native\PinnedArrayPool.cs</Link>
     </Compile>
     <Compile Include="..\LMDotNet-451\OptimizationResult.cs">
       <Link>OptimizationResult.cs</Link>
     </Compile>
     <Compile Include="..\LMDotNet-451\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <None Include="..\LMDotNet-451\Properties\VersionInfo.base.cs">
+      <Link>Properties\VersionInfo.base.cs</Link>
+    </None>
+    <Compile Include="..\LMDotNet-451\Properties\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="..\LMDotNet-451\SolverStatus.cs">
       <Link>SolverStatus.cs</Link>
@@ -81,4 +87,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <UsingTask TaskName="HgVersionFile" AssemblyFile="..\lib\MSBuildVersioning.dll" />
+  <Target Name="BeforeBuild">
+    <HgVersionFile TemplateFile="..\LMDotNet-451\Properties\VersionInfo.base.cs" DestinationFile="Properties\VersionInfo.cs" />
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
 </Project>

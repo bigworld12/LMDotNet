@@ -9,7 +9,7 @@ namespace LMDotNet.Native
     // Note: this allocator is NOT thread safe!
     // TODO: use ConcurrentDictionary (or locks)
     [DebuggerDisplay("array count = {ptrToArray.Count}")]
-    sealed class PinnedArrayAllocator<T> : IDisposable
+    sealed class PinnedArrayPool<T> : IDisposable
           where T : struct
     {
         private Dictionary<IntPtr, T[]> ptrToArray;
@@ -19,7 +19,7 @@ namespace LMDotNet.Native
             get { return ptrToArray[pBase]; }
         }    
 
-        public PinnedArrayAllocator() {
+        public PinnedArrayPool() {
             this.ptrToArray = new Dictionary<IntPtr, T[]>();
             this.ptrToHandle = new Dictionary<IntPtr, GCHandle>();
         }

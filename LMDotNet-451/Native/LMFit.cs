@@ -46,6 +46,6 @@ namespace LMDotNet.Native
         internal static extern void lmmin(
             int n_par, double[] par, int m_dat, IntPtr data, LMDelegate evaluate, 
             ref LMControlStruct control, ref LMStatusStruct status, 
-            AllocaterDelegate arrayAllocator, DeallocatorDelegate arrayDeallocator);        
+            AllocatorDelegate arrayAllocator, DeallocatorDelegate arrayDeallocator);        
     }
 }

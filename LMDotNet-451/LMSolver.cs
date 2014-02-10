@@ -126,7 +126,7 @@ namespace LMDotNet
         /// <returns>Optimization outcome and optimal paramters, if successful</returns>
         private OptimizationResult CallNativeSolver(
             LMDelegate fun, double[] parameters, 
-            AllocaterDelegate allocate, DeallocatorDelegate deallocate,
+            AllocatorDelegate allocate, DeallocatorDelegate deallocate,
             int mData)
         {
             // build control structure understood by lmmin
@@ -175,27 +175,27 @@ namespace LMDotNet
        /// == length of the residue vector; invariant: nDataPoints &gt;= length(x0)</param>
        /// <returns>Optimum x_opt (if successful) and solution status</returns>
        public OptimizationResult Minimize(Action<double[], double[]> f, double[] x0, int nDataPoints) {
-            var allocator = new PinnedArrayAllocator<double>();
+            var pool = new PinnedArrayPool<double>();
 
             // optimizedPars must be allocated via allocator, because
             // the first callback-call (== call to nativeFun) pases a 
             // pointer to optimizedPars in the "par" parameter
-            var pOptimizedPars = allocator.AllocatePinnedArray(x0.Length);
-            double[] optimizedPars = allocator[pOptimizedPars];
+            var pOptimizedPars = pool.AllocatePinnedArray(x0.Length);
+            double[] optimizedPars = pool[pOptimizedPars];
             x0.CopyTo(optimizedPars, 0);
 
             var result = CallNativeSolver(
                 // translate Action<double[], double[]> to LMDelegate
-                (par, m_dat, dataPtr, fvec, userbreak) => f(allocator[par], allocator[fvec]),
+                (par, m_dat, dataPtr, fvec, userbreak) => f(pool[par], pool[fvec]),
                 optimizedPars,
-                allocator.AllocatePinnedArray,
-                allocator.UnpinArray, 
+                pool.AllocatePinnedArray,
+                pool.UnpinArray, 
                 nDataPoints);
 
             // pinned managed arrays allocated by lmmin may be garbage collected 
             // starting from here (if not referenced anymore)
-            allocator.UnpinArray(pOptimizedPars);
-            GC.KeepAlive(allocator);
+            pool.UnpinArray(pOptimizedPars);
+            GC.KeepAlive(pool);
 
             return result;
         }

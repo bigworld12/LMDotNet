@@ -9,7 +9,7 @@ namespace LMDotNet.Native
     /// <param name="count">Number of doubles to allocate</param>
     /// <returns>Pointer to the base address</returns>
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    delegate IntPtr AllocaterDelegate(int count);
+    delegate IntPtr AllocatorDelegate(int count);
 
     /// <summary>
     /// Signature of the deallocator ("free") passed into LMFit.lmmin
