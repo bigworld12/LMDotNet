@@ -8,7 +8,7 @@ namespace LMDotNet
     /// Levenberg-Marquardt non-linear least squares solver
     /// based on lmfit
     /// </summary>
-    public class LMSolver
+    public sealed class LMSolver
     {
         /// <summary>Relative error desired in the sum of squares.
         /// Termination occurs when both the actual and
@@ -149,14 +149,14 @@ namespace LMDotNet
             LMFit.lmmin(parameters.Length, parameters, mData, IntPtr.Zero, fun, ref ctrl, ref stat, allocate, deallocate);
 
             // extract results from lmmin's result data struct
-            OptimizationResult result = new OptimizationResult {
-                errorNorm = stat.fnorm,
-                iterations = stat.nfev,
-                optimizedParameters = parameters,
-                message = LMSolver.outcomeMessages[stat.outcome],
-                terminatedByUserRequest = stat.userbreak > 0 ? true : false,
-                outcome = (SolverStatus)stat.outcome
-            };
+            OptimizationResult result = new OptimizationResult(
+                parameters, 
+                stat.fnorm, 
+                stat.nfev, 
+                (SolverStatus)stat.outcome, 
+                LMSolver.outcomeMessages[stat.outcome], 
+                stat.userbreak > 0 ? true : false
+            );
 
             return result;
         }

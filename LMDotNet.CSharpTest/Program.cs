@@ -42,8 +42,8 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("      y = -0.5x² + 3.0 &&");
             Console.WriteLine("      y = exp(-x)");
             Console.WriteLine("is true.");
-            Console.WriteLine("1st solution: x = {0}, y = {1}", result1.optimizedParameters[0], result1.optimizedParameters[1]);
-            Console.WriteLine("2nd solution: x = {0}, y = {1}", result2.optimizedParameters[0], result2.optimizedParameters[1]);
+            Console.WriteLine("1st solution: x = {0}, y = {1}", result1.OptimizedParameters[0], result1.OptimizedParameters[1]);
+            Console.WriteLine("2nd solution: x = {0}, y = {1}", result2.OptimizedParameters[0], result2.OptimizedParameters[1]);
             Console.WriteLine();
 
             // 2nd Example:
@@ -63,8 +63,8 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("Solve");
             Console.WriteLine("      y = -x² + 6 &&");
             Console.WriteLine("      y = -2x - 2");
-            Console.WriteLine("1st solution: x = {0}, y = {1}", result1.optimizedParameters[0], result1.optimizedParameters[1]);
-            Console.WriteLine("2nd solution: x = {0}, y = {1}", result2.optimizedParameters[0], result2.optimizedParameters[1]);
+            Console.WriteLine("1st solution: x = {0}, y = {1}", result1.OptimizedParameters[0], result1.OptimizedParameters[1]);
+            Console.WriteLine("2nd solution: x = {0}, y = {1}", result2.OptimizedParameters[0], result2.OptimizedParameters[1]);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace LMDotNet.CSharpTest
             Console.WriteLine("   Parameter vector ε = [β0 β1 β2]^T");
             Console.WriteLine("   Residue: ε = y - y' = y - X β");
             Console.WriteLine("   Find β' = argmin_β sum(ε²)");
-            Console.WriteLine("Fit: y' = {0} + {1} x + {2} z", fit.optimizedParameters[0], fit.optimizedParameters[1], fit.optimizedParameters[2]);
+            Console.WriteLine("Fit: y' = {0} + {1} x + {2} z", fit.OptimizedParameters[0], fit.OptimizedParameters[1], fit.OptimizedParameters[2]);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace LMDotNet.CSharpTest
             var fit1D = solver.FitCurve((t, p) => p[0] * Math.Sin(p[1] * t + p[2]) + p[3], new[] { 1.0, 1.0, 1.0, 1.0 }, ts, sins);
             Console.WriteLine();
             Console.WriteLine("Aim: fit a sine wave to noisy data");
-            Console.WriteLine("Fit: y' = {0} sin({1} x + {2}) + {3}", fit1D.optimizedParameters[0], fit1D.optimizedParameters[1], fit1D.optimizedParameters[2], fit1D.optimizedParameters[3]);
+            Console.WriteLine("Fit: y' = {0} sin({1} x + {2}) + {3}", fit1D.OptimizedParameters[0], fit1D.OptimizedParameters[1], fit1D.OptimizedParameters[2], fit1D.OptimizedParameters[3]);
 
             // 2nd example: fit a linear plane to some sample points 
             // (cf. GenericMinimizationExamples for doing the same with
@@ -148,7 +148,7 @@ namespace LMDotNet.CSharpTest
             var fitPlane = solver.FitSurface((x, z, p) => p[0] + p[1] * x + p[2] * z, new[] { 0.0, 0.0, 0.0 }, xs, zs, ys);
             Console.WriteLine();
             Console.WriteLine("Aim: fit a plane to four data points");
-            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fitPlane.optimizedParameters[0], fitPlane.optimizedParameters[1], fitPlane.optimizedParameters[2]);
+            Console.WriteLine("Fit: y = {0} + {1} x + {2} z", fitPlane.OptimizedParameters[0], fitPlane.OptimizedParameters[1], fitPlane.OptimizedParameters[2]);
         }
         
         static void Main(string[] args) {
