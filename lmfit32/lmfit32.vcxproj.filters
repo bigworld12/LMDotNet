@@ -26,13 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lmcurve.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lmmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lmstruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lmcurve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
