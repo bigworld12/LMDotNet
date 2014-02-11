@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyVersion("1.6.0.$REVNUM$")]
+[assembly: AssemblyVersion("1.7.0.$REVNUM$")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Dbg; $REVID$; $DATETIME$")]

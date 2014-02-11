@@ -1,5 +1,5 @@
 ﻿open System
-open LMDotNet.FSharp
+open LMDotNet
 
 [<EntryPoint>]
 let main argv = 

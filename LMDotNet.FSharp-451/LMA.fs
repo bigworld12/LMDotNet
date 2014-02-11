@@ -1,4 +1,4 @@
-﻿namespace LMDotNet.FSharp
+﻿namespace LMDotNet
 
 type SolverSettings = 
     { /// <summary>Relative error desired in the sum of squares.
