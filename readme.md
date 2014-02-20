@@ -16,6 +16,12 @@ in the NuGet Package Manager Console (or use the built-in NuGet Package Manager 
 
 *Important note:* The `lmfit` binaries are built using Visual Studio 2013; you thus need to make sure that you have installed the [Visual C++ Redistributable Packages for Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40784).
 
+In case you want to use LM.NET from F#, it is recommended to instead
+
+    PM> Install-Package LMDotNet.FSharp
+
+The F# interface enables you to use LM.NET with normal F# function values,  which are different from the `Func<_>` and `Action<_>` delegates used in the C# world to represent lambdas and which the "normal" LM.NET solver APIs expect.
+    
 ### Building from Source
 Download the current version of the LM.NET source using Mercurial
 
@@ -27,10 +33,11 @@ Download the current version of the LM.NET source using Mercurial
 If you want to redistribute software that uses LM.NET, you need to include the managed class library `LMDotNet.dll` as well as the native libraries it depends on in your application package. Assuming that your main binary is `.\myapp.exe`, assure the following layout:
 
  - `.\LMDotNet.dll` - the managed class library
+ - `.\LMDotNet.FSharp.dll` - F# adaptor
  - `.\lmfit32\lmfit.dll` - x86 version of lmfit
  - `.\lmfit64\lmfit.dll` - x64 version of lmfit
 
-If you know that your .NET application will always run in either x86 or x64 mode (i.e. the platform target is **not** "AnyCPU") you can optionally omit the unneeded native library version.
+`.\LMDotNet.FSharp.dll` is only required for F# programs. If you know that your .NET application will always run in either x86 or x64 mode (i.e. the platform target is **not** "AnyCPU") you can optionally omit the unneeded native library version.
 
 ## Quickstart: Solving a system of non-linear equations
 
@@ -57,6 +64,11 @@ The following example shows how to implement the [nls solving demo problem](http
     Console.WriteLine("2nd solution: x = {0}, y = {1}", 
         res2.optimizedParameters[0], res2.optimizedParameters[1]);            
 ```
+
+More examples in the source repository:
+
+  - [C# examples](https://bitbucket.org/frank_niemeyer/lmdotnet/src/e0d3b4d13fcd/LMDotNet.CSharpTest/?at=default)
+  - [F# example](https://bitbucket.org/frank_niemeyer/lmdotnet/src/e0d3b4d13fcdcf0c1c6b85ad8b5e062a2c44ce6f/LMDotNet.FSharpTest/Program.fs?at=default)
 
 ## License
 LM.NET is distributed under the terms of the FreeBSD license (BSD 2-clause license):
