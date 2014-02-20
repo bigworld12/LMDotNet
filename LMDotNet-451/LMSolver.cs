@@ -42,9 +42,9 @@ namespace LMDotNet
 
         /// <summary>
         /// Used to set the maximum number of function evaluations
-        /// to patience*(number_of_parameters+1)
+        /// to Patience * (number_of_parameters + 1)
         /// </summary>
-        public int MaxIterations { get; set; }
+        public int Patience { get; set; }
 
         /// <summary>
         /// If true, the variables will be rescaled internally. Recommended value is 1.
@@ -94,7 +94,7 @@ namespace LMDotNet
         /// in the interval (0.1,100.0). Generally, the value
         /// 100.0 is recommended.</param>
         /// <param name="patience">Used to set the maximum number of function evaluations
-        /// to patience*(number_of_parameters+1)</param>
+        /// to patience * (number_of_parameters + 1)</param>
         /// <param name="scaleDiagonal">If 1, the variables will be rescaled internally. Recommended value is 1.</param>
         /// <param name="verbose">true: print status messages to stdout</param>
         public LMSolver(double ftol = defaultTolerance,
@@ -110,7 +110,7 @@ namespace LMDotNet
             this.Gtol = gtol;
             this.Epsilon = epsilon;
             this.InitialStepbound = stepbound;
-            this.MaxIterations = patience;
+            this.Patience = patience;
             this.ScaleDiagonal = scaleDiagonal;
             this.VerboseOutput = verbose;
         }               
@@ -134,7 +134,7 @@ namespace LMDotNet
                 ftol = this.Ftol,
                 gtol = this.Gtol,
                 xtol = this.Xtol,
-                patience = this.MaxIterations,
+                patience = this.Patience,
                 epsilon = this.Epsilon,
                 msgfile = IntPtr.Zero,
                 m_maxpri = -1,

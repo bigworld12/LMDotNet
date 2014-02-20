@@ -33,9 +33,9 @@ type SolverSettings =
 
       /// <summary>
       /// Used to set the maximum number of function evaluations
-      /// to patience*(number_of_parameters+1)
+      /// to patience * (number_of_parameters + 1)
       /// </summary>
-      maxIterations: int
+      patience: int
 
       /// <summary>
       /// If true, the variables will be rescaled internally. Recommended value is 1.
@@ -58,7 +58,7 @@ module LMA =
           gtol = defaultTolerance
           epsilon = defaultTolerance
           initialStepbound = 100.0
-          maxIterations = 100
+          patience = 100
           scaleDiagonal = true
           verboseOutput = false }
 
@@ -71,8 +71,9 @@ module LMA =
         solver.InitialStepbound <- settings.initialStepbound
         solver.ScaleDiagonal <- settings.scaleDiagonal
         solver.VerboseOutput <- settings.verboseOutput
+        solver.Patience <- settings.patience
         solver
-
+    
     /// <summary>
     /// Determines the vector x that minimizes the squared L2-norm of a user-supplied
     /// function f, i.e. it determines x_opt = argmin_x ||f(x)||²

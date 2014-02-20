@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet.CSharpTest", "LMDotNet.CSharpTest\LMDotNet.CSharpTest.csproj", "{20F7603D-0CDF-4FA5-98E8-BBFCB6F5524E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -49,6 +49,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LMDotNet.FSharpTest", "LMDo
 	ProjectSection(ProjectDependencies) = postProject
 		{7B929D7C-7245-45DB-99D4-58A8853607D0} = {7B929D7C-7245-45DB-99D4-58A8853607D0}
 		{0248C6E5-6BAF-494A-BD1A-6BC63C37B73B} = {0248C6E5-6BAF-494A-BD1A-6BC63C37B73B}
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LMDotNet.FSharp-45", "LMDotNet.FSharp-45\LMDotNet.FSharp-45.fsproj", "{053169A4-5088-4DCD-AE45-A482E56D345A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5} = {F9297E75-A0EB-41A9-B0F1-9F5954FDF2C5}
 	EndProjectSection
 EndProject
 Global
@@ -211,6 +216,20 @@ Global
 		{E0BBE455-6C06-48AC-8475-214D00D4DF72}.Release|Win32.ActiveCfg = Release|Any CPU
 		{E0BBE455-6C06-48AC-8475-214D00D4DF72}.Release|x64.ActiveCfg = Release|Any CPU
 		{E0BBE455-6C06-48AC-8475-214D00D4DF72}.Release|x86.ActiveCfg = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|x64.ActiveCfg = Release|Any CPU
+		{053169A4-5088-4DCD-AE45-A482E56D345A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

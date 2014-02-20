@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>LMDotNet.FSharp</id>
-        <version>1.7.0</version>
+        <version>1.7.1</version>
         <title>LM.NET for F#</title>
         <authors>Frank Niemeyer</authors>
         <owners>Frank Niemeyer</owners>
@@ -10,11 +10,11 @@
         <projectUrl>https://bitbucket.org/frank_niemeyer/lmdotnet</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Levenberg-Marquardt non-linear least squares solver for .NET</description>
-        <releaseNotes>initial release</releaseNotes>
+        <releaseNotes>initial NuGet release</releaseNotes>
         <tags>maths optimization least-squares solver</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5.1">
-                <dependency id="LMDotNet" version="[1.7.0,]" />
+                <dependency id="LMDotNet" version="1.7.1" />
             </group>
         </dependencies>
     </metadata>

@@ -3,11 +3,8 @@ open LMDotNet
 
 [<EntryPoint>]
 let main argv = 
-    // set up solver
-    let solverEngine = { LMA.defaultSettings with verboseOutput = true } 
-                       |> LMA.init
-
-    let findMin = LMA.minimize solverEngine
+    let solverSettings = { LMA.defaultSettings with verboseOutput = true } 
+    let findMin = solverSettings |> LMA.init |> LMA.minimize
     
     let res1 = fun (p: float[]) (r: float[]) -> r.[0] <- p.[1] - p.[0]
                                                 r.[1] <- p.[1] - 2.0 * p.[0] + 0.5
