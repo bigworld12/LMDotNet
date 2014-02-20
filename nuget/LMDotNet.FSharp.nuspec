@@ -14,11 +14,17 @@
         <tags>maths optimization least-squares solver</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5.1">
-                <dependency id="LMDotNet" version="1.7.1" />
+                <dependency id="LMDotNet" version="[1.7.1]" />
+            </group>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="LMDotNet" version="[1.7.1]" />
             </group>
         </dependencies>
     </metadata>
     <files>
+        <file src="..\LMDotNet.FSharp-45\bin\Release\LMDotNet.FSharp.dll" target="lib\net45\LMDotNet.FSharp.dll" />
+        <file src="..\LMDotNet.FSharp-45\bin\Release\LMDotNet.FSharp.XML" target="lib\net45\LMDotNet.XML" />
+        <file src="..\LMDotNet.FSharp-45\bin\Release\LMDotNet.FSharp.pdb" target="lib\net45\LMDotNet.FSharp.pdb" />
         <file src="..\LMDotNet.FSharp-451\bin\Release\LMDotNet.FSharp.dll" target="lib\net451\LMDotNet.FSharp.dll" />
         <file src="..\LMDotNet.FSharp-451\bin\Release\LMDotNet.FSharp.XML" target="lib\net451\LMDotNet.XML" />
         <file src="..\LMDotNet.FSharp-451\bin\Release\LMDotNet.FSharp.pdb" target="lib\net451\LMDotNet.FSharp.pdb" />
