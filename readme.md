@@ -14,7 +14,7 @@ This is most likely the easiest way to set up LM.NET. Just type
     
 in the NuGet Package Manager Console (or use the built-in NuGet Package Manager GUI in Visual Studio). The package automatically chooses the right version of the class library depending on the target framework version of the current project (v3.5 up to v4.5.1). The packge also automatically installs the native libraries and corresponding debug symbols into the `lmfit32` (x86) and `lmfit64` (x64) project subdirectories. The correct version is then chosen automatically at runtime by LM.NET.
 
-*Important note:* The `lmfit` binaries are built using Visual Studio 2013; you thus need to make sure that you have installed the [Visual C++ Redistributable Packages for Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40784).
+*Important note:* Before v1.7.2, the `lmfit` DLLs additionally required the installation of the [Visual C++ Redistributable Packages for Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40784). As of v1.7.2+, `lmfit` is statically linked to the VS 2013 C runtime libraries and shouldn't require the aforementioned redistributable package anymore.
 
 In case you want to use LM.NET from F#, it is recommended to instead
 
