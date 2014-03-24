@@ -4,23 +4,22 @@ using System.Runtime.InteropServices;
 namespace LMDotNet.Native
 {
     /// <summary>
-    /// Signature of the allocator passed into LMFit.lmmin
+    /// Signature of the double array allocator passed into LMFit.lmmin
     /// </summary>
     /// <param name="count">Number of doubles to allocate</param>
-    /// <returns>Pointer to the base address</returns>
+    /// <returns>Pointer to the base address of the allocated array</returns>
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     delegate IntPtr AllocatorDelegate(int count);
 
     /// <summary>
-    /// Signature of the deallocator ("free") passed into LMFit.lmmin
+    /// Signature of the array deallocator ("free") passed into LMFit.lmmin
     /// </summary>
     /// <param name="ptr">Managed array to "free" (unpin)</param>
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     delegate void DeallocatorDelegate(IntPtr ptr);
 
     /// <summary>
-    /// Signature of the user-defined equation (system) that 
-    /// is to be evaluated
+    /// Signature of the user-defined equation (system) that is to be evaluated
     /// </summary>
     /// <param name="par">[In] Current values of the free variables/parameters (double*)</param>
     /// <param name="m_dat">Number of equations/data points</param>

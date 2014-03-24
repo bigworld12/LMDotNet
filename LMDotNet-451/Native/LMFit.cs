@@ -9,13 +9,21 @@ namespace LMDotNet.Native
     /// </summary>
     static class LMFit
     {
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        static extern IntPtr LoadLibrary(string lpFileName);
-
+        /// <summary>
+        /// File name of the native lmfit (shared) library
+        /// </summary>
         const string dllName = "lmfit.dll";
 
+        /// <summary>
+        /// Pointer to the dynamically (pre-)loaded lmfit library
+        /// </summary>
         static IntPtr lmfitDllHandle;
 
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern IntPtr LoadLibrary(string lpFileName);
+                
+        // Preload the native lmfit library with the correct bitness;
+        // => calls to lmmin are automatically resolved to this already loaded library
         static LMFit() {
             string dllDir;
             if (IntPtr.Size == 8) {
