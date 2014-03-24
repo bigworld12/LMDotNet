@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Information about the optimization outcome; if the
-    /// optimization procedure converged, optimizedParameters
+    /// optimization procedure converged, OptimizedParameters
     /// contains the parameters, which minimize the user
     /// supplied function.
     /// </summary>

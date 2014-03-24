@@ -26,7 +26,7 @@
         ConvergedBoth = 3,
 
         /// <summary>
-        /// by degeneracy; increasing epsilon might help
+        /// trapped by degeneracy; increasing epsilon might help
         /// </summary>
         Trapped = 4,
 
@@ -36,17 +36,17 @@
         Exhausted = 5,
 
         /// <summary>
-        /// ftol&lt;tol: cannot reduce sum of squares any further
+        /// ftol &lt; tol: cannot reduce sum of squares any further
         /// </summary>
         FailedFTOL = 6,
 
         /// <summary>
-        /// xtol&lt;tol: cannot improve approximate solution any further
+        /// xtol &lt; tol: cannot improve approximate solution any further
         /// </summary>
         FailedXTOL = 7,
 
         /// <summary>
-        /// gtol&lt;tol: cannot improve approximate solution any further
+        /// gtol &lt; tol: cannot improve approximate solution any further
         /// </summary>
         FailedGTOL = 8,
 

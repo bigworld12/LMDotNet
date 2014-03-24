@@ -5,26 +5,25 @@ using System.Diagnostics;
 namespace LMDotNet
 {
     /// <summary>
-    /// Levenberg-Marquardt non-linear least squares solver
-    /// based on lmfit
+    /// Levenberg-Marquardt non-linear least squares solver based on lmfit
     /// </summary>
     public sealed class LMSolver
     {
         /// <summary>Relative error desired in the sum of squares.
         /// Termination occurs when both the actual and
         /// predicted relative reductions in the sum of squares
-        /// are at most ftol.</summary>
+        /// are at most Ftol.</summary>
         public double Ftol { get; set; }
 
         /// <summary> Relative error between last two approximations.
         /// Termination occurs when the relative error between
-        /// two consecutive iterates is at most xtol.</summary>
+        /// two consecutive iterates is at most Xtol.</summary>
         public double Xtol { get; set; }
 
-        /// <summary> Orthogonality desired between fvec and its derivs.
+        /// <summary> Orthogonality desired between fvec and its derivatives.
         /// Termination occurs when the cosine of the angle
         /// between fvec and any column of the Jacobian is at
-        /// most gtol in absolute value. (measure of degeneracy) </summary>
+        /// most Gtol in absolute value. (measure of degeneracy) </summary>
         public double Gtol { get; set; }
 
         /// <summary> Step used to calculate the Jacobian, should be
@@ -33,17 +32,15 @@ namespace LMDotNet
         public double Epsilon { get; set; }
 
         /// <summary> Used in determining the initial step bound. This
-        /// bound is set to the product of stepbound and the
+        /// bound is set to the product of InitialStepbound and the
         /// Euclidean norm of diag*x if nonzero, or else to
-        /// stepbound itself. In most cases stepbound should lie
-        /// in the interval (0.1,100.0). Generally, the value
+        /// InitialStepbound itself. In most cases InitialStepbound should lie
+        /// in the interval [0.1, 100.0]. Generally, the value
         /// 100.0 is recommended.</summary>         
         public double InitialStepbound { get; set; }
 
-        /// <summary>
-        /// Used to set the maximum number of function evaluations
-        /// to Patience * (number_of_parameters + 1)
-        /// </summary>
+        /// <summary> Sets the maximum number of function evaluations
+        /// to Patience * (number_of_parameters + 1)</summary>
         public int Patience { get; set; }
 
         /// <summary>
@@ -51,14 +48,13 @@ namespace LMDotNet
         /// </summary>
         public bool ScaleDiagonal { get; set; }
 
-        /// <summary>
-        /// true: print status messages to stdout
-        /// </summary>
+        /// <summary> true: print status messages to stdout</summary>
         public bool VerboseOutput { get; set; }
 
         // from lmmin.c
         private const double defaultTolerance = 1.0e-14;
 
+        // from lmmin.c
         private static readonly string[] outcomeMessages =
           { "found zero (sum of squares below underflow limit)",
             "converged  (the relative error in the sum of squares is at most tol)",
@@ -120,8 +116,9 @@ namespace LMDotNet
         /// </summary>
         /// <param name="fun">The user supplied function to update the residue vector</param>
         /// <param name="parameters">initial guess for the parameters</param>
-        /// <param name="allocate">Memory allocator</param>
-        /// <param name="deallocate">Memory deallocator</param>
+        /// <param name="allocate">Double array allocator used to allocate arrays that
+        /// fun needs to access (parameter vector) and update (residue vector) when called</param>
+        /// <param name="deallocate">Array deallocator</param>
         /// <param name="mData">Number of data points == number of equations == length of the residue vector</param>
         /// <returns>Optimization outcome and optimal paramters, if successful</returns>
         private OptimizationResult CallNativeSolver(
@@ -172,21 +169,22 @@ namespace LMDotNet
        /// <param name="nDataPoints">Length of f(x) 
        /// == number of datapoints (for regression)        
        /// == number of equations (for solving NLS)
-       /// == length of the residue vector; invariant: nDataPoints &gt;= length(x0)</param>
+       /// == length of the residue vector</param>
+       /// <remarks>Invariant: nDataPoints &gt;= length(x0)</remarks>
        /// <returns>Optimum x_opt (if successful) and solution status</returns>
        public OptimizationResult Minimize(Action<double[], double[]> f, double[] x0, int nDataPoints) {
            OptimizationResult result = null;
            
            using (var pool = new PinnedArrayPool<double>()) {
                // optimizedPars must be allocated via allocator, because
-               // the first callback-call (== call to nativeFun) pases a 
+               // the first callback-call (== call to nativeFun) passes a 
                // pointer to optimizedPars in the "par" parameter
                var pOptimizedPars = pool.AllocatePinnedArray(x0.Length);
-               double[] optimizedPars = pool[pOptimizedPars];
+               var optimizedPars = pool[pOptimizedPars];
                x0.CopyTo(optimizedPars, 0);
 
                result = CallNativeSolver(
-                   // translate Action<double[], double[]> to LMDelegate
+                   // translate Action<double[], double[]> to LMDelegate:
                    (par, m_dat, dataPtr, fvec, userbreak) => f(pool[par], pool[fvec]),
                    optimizedPars,
                    pool.AllocatePinnedArray,
@@ -194,7 +192,7 @@ namespace LMDotNet
                    nDataPoints);
 
                // pinned managed arrays allocated by lmmin may be garbage collected 
-               // starting from here (if not referenced anymore)
+               // starting from here (if unpinned and not referenced anymore)
                pool.UnpinArray(pOptimizedPars);
                GC.KeepAlive(pool); // really neccessary?
            }
@@ -203,7 +201,7 @@ namespace LMDotNet
         }
 
         /// <summary>
-        /// Solve a system of non-linear equations (in a least-squares sense,
+        /// Solves a system of non-linear equations (in a least-squares sense,
         /// i.e. by optimizing parameters to minimize a residue vector)
         /// </summary>
         /// <param name="f">Computes the residuals based on the current parameters;
@@ -232,6 +230,7 @@ namespace LMDotNet
         /// <param name="xs">sampling locations</param>
         /// <param name="ys">samples (data points)</param>
         /// <returns>Optimized model parameters and status</returns>
+        /// <remarks>Invariant: xs.Length == ys.Length</remarks>
         public OptimizationResult FitCurve(Func<double, double[], double> model, double[] beta0, double[] xs, double[] ys) {
             Debug.Assert(xs.Length == ys.Length);
 
@@ -259,8 +258,9 @@ namespace LMDotNet
         /// <param name="beta0">Initial guess for the model parameter vector</param>
         /// <param name="xs">First coordinate of the sampling locations</param>
         /// <param name="ys">Second coordinate of the sampling locations</param>
-        /// <param name="zs">samples (data points) at (x, y) locations</param>
+        /// <param name="zs">samples (data points) for each (x, y) location</param>
         /// <returns>Optimized model parameters and status</returns>
+        /// <remarks>Invariant: xs.Length == ys.Length == zs.Length</remarks>
         public OptimizationResult FitSurface(Func<double, double, double[], double> model, double[] beta0, double[] xs, double[] ys, double[] zs) {
             Debug.Assert(xs.Length == ys.Length && ys.Length == zs.Length);
             
@@ -288,6 +288,7 @@ namespace LMDotNet
         /// <param name="samplePoints">Sample locations; first index: coordinate; second index: sample number</param>
         /// <param name="samples">Samples (data points) for each sample locations</param>
         /// <returns>Optimized model parameters and status</returns>
+        /// <remarks>Invariant: samplePoints[i].Length == samples.Length for all i</remarks>
         public OptimizationResult Fit(Func<double[], double[], double> model, double[] beta0, double[][] samplePoints, double[] samples) {
             Action<double[], double[]> fun = (parameters, residuals) => {
                 for (int i = 0; i < samples.Length; ++i) {
