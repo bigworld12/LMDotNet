@@ -73,7 +73,7 @@ More examples in the source repository:
 ## License
 LM.NET is distributed under the terms of the FreeBSD license (BSD 2-clause license):
 
-Copyright (c) 2013, 2014, Frank Niemeyer
+Copyright (c) 2013, 2014, 2015 Frank Niemeyer
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
