@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LMDotNet.CSharpTest</RootNamespace>
     <AssemblyName>LMDotNet.CSharpTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -54,9 +54,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-451\LMDotNet-451.csproj">
+    <ProjectReference Include="..\LMDotNet-452\LMDotNet-452.csproj">
       <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
-      <Name>LMDotNet-451</Name>
+      <Name>LMDotNet-452</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
