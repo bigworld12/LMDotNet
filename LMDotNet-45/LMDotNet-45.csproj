@@ -45,37 +45,37 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="..\LMDotNet-451\LMSolver.cs">
+    <Compile Include="..\LMDotNet-452\LMSolver.cs">
       <Link>LMSolver.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Native\LMControlStruct.cs">
+    <Compile Include="..\LMDotNet-452\Native\LMControlStruct.cs">
       <Link>Native\LMControlStruct.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Native\LMFit.cs">
+    <Compile Include="..\LMDotNet-452\Native\LMFit.cs">
       <Link>Native\LMFit.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Native\LMStatusStruct.cs">
+    <Compile Include="..\LMDotNet-452\Native\LMStatusStruct.cs">
       <Link>Native\LMStatusStruct.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Native\NativeCallbacks.cs">
+    <Compile Include="..\LMDotNet-452\Native\NativeCallbacks.cs">
       <Link>Native\NativeCallbacks.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Native\PinnedArrayPool.cs">
+    <Compile Include="..\LMDotNet-452\Native\PinnedArrayPool.cs">
       <Link>Native\PinnedArrayPool.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\OptimizationResult.cs">
+    <Compile Include="..\LMDotNet-452\OptimizationResult.cs">
       <Link>OptimizationResult.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\Properties\AssemblyInfo.cs">
+    <Compile Include="..\LMDotNet-452\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <None Include="..\LMDotNet-451\Properties\VersionInfo.base.cs">
+    <None Include="..\LMDotNet-452\Properties\VersionInfo.base.cs">
       <Link>Properties\VersionInfo.base.cs</Link>
     </None>
-    <Compile Include="..\LMDotNet-451\Properties\VersionInfo.cs">
+    <Compile Include="..\LMDotNet-452\Properties\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="..\LMDotNet-451\SolverStatus.cs">
+    <Compile Include="..\LMDotNet-452\SolverStatus.cs">
       <Link>SolverStatus.cs</Link>
     </Compile>
   </ItemGroup>
@@ -89,7 +89,7 @@
   -->
   <UsingTask TaskName="HgVersionFile" AssemblyFile="..\lib\MSBuildVersioning.dll" />
   <Target Name="BeforeBuild">
-    <HgVersionFile TemplateFile="..\LMDotNet-451\Properties\VersionInfo.base.cs" DestinationFile="Properties\VersionInfo.cs" />
+    <HgVersionFile TemplateFile="..\LMDotNet-452\Properties\VersionInfo.base.cs" DestinationFile="Properties\VersionInfo.cs" />
   </Target>
   <Target Name="AfterBuild">
   </Target>

@@ -54,7 +54,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LMDotNet-451\LMDotNet-451.csproj">
       <Name>LMDotNet-451</Name>
-      <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
+      <Project>{efd51fb6-5211-4334-83c6-5aa51f00da26}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\LMDotNet.FSharp-451\LMDotNet.FSharp-451.fsproj">
