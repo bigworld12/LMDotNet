@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>053169a4-5088-4dcd-ae45-a482e56d345a</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>LMDotNet.FSharp_45</RootNamespace>
+    <RootNamespace>LMDotNet.FSharp</RootNamespace>
     <AssemblyName>LMDotNet.FSharp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
@@ -21,7 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\LMDotNet.FSharp_45.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\LMDotNet.FSharp.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,16 +42,16 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LMDotNet.FSharp-451\LMA.fs">
-      <Link>LMA.fs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\LMDotNet-45\LMDotNet-45.csproj">
       <Name>LMDotNet-45</Name>
       <Project>{f9297e75-a0eb-41a9-b0f1-9f5954fdf2c5}</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\LMDotNet.FSharp-452\LMA.fs">
+      <Link>LMA.fs</Link>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

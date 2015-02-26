@@ -5,14 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>e0bbe455-6c06-48ac-8475-214d00d4df72</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>LMDotNet.FSharpTest</RootNamespace>
-    <AssemblyName>LMDotNet.FSharpTest</AssemblyName>
+    <ProjectGuid>{53d86ca3-e2b8-4b6a-8115-34bf8ab93888}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>LMDotNet.FSharp</RootNamespace>
+    <AssemblyName>LMDotNet.FSharp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
-    <Name>LMDotNet.FSharpTest</Name>
+    <Name>LMDotNet.FSharp-451</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -23,9 +22,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\LMDotNet.FSharpTest.XML</DocumentationFile>
-    <Prefer32Bit>true</Prefer32Bit>
+    <DocumentationFile>bin\Debug\LMDotNet.FSharp.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,35 +31,8 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Release\LMDotNet.FSharpTest.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\LMDotNet.FSharp.XML</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.fs" />
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-452\LMDotNet-452.csproj">
-      <Name>LMDotNet-452</Name>
-      <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\LMDotNet.FSharp-452\LMDotNet.FSharp-452.fsproj">
-      <Name>LMDotNet.FSharp-452</Name>
-      <Project>{53d86ca3-e2b8-4b6a-8115-34bf8ab93888}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -79,12 +49,25 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
-  <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)\lmfit32"
-copy "$(SolutionDir)lmfit32\bin\$(Configuration)\lmfit.dll" "$(TargetDir)\lmfit32"
-mkdir "$(TargetDir)\lmfit64"
-copy "$(SolutionDir)lmfit64\bin\$(Configuration)\lmfit.dll" "$(TargetDir)\lmfit64"</PostBuildEvent>
-  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LMA.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LMDotNet-452\LMDotNet-452.csproj">
+      <Name>LMDotNet-452</Name>
+      <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
