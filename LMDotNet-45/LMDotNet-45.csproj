@@ -60,6 +60,9 @@
     <Compile Include="..\LMDotNet-452\Native\NativeCallbacks.cs">
       <Link>Native\NativeCallbacks.cs</Link>
     </Compile>
+    <Compile Include="..\LMDotNet-452\Native\PinnedArray.cs">
+      <Link>Native\PinnedArray.cs</Link>
+    </Compile>
     <Compile Include="..\LMDotNet-452\Native\PinnedArrayPool.cs">
       <Link>Native\PinnedArrayPool.cs</Link>
     </Compile>

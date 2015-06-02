@@ -55,6 +55,7 @@
     <Compile Include="Native\LMFit.cs" />
     <Compile Include="Native\LMStatusStruct.cs" />
     <Compile Include="Native\NativeCallbacks.cs" />
+    <Compile Include="Native\PinnedArray.cs" />
     <Compile Include="Native\PinnedArrayPool.cs" />
     <Compile Include="OptimizationResult.cs" />
     <Compile Include="SolverStatus.cs" />
