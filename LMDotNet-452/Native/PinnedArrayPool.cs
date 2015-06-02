@@ -20,16 +20,29 @@ namespace LMDotNet.Native
     sealed class PinnedArrayPool<T> : IDisposable
           where T : struct
     {
-        private Dictionary<IntPtr, T[]> pinnedArrays;
-        private Dictionary<IntPtr, GCHandle> gcHandles;
+        struct PinnedArray
+        {
+            public readonly T[] Array;
+            public readonly GCHandle Handle;
+
+            public PinnedArray(T[] array, GCHandle handle) {
+                this.Array = array;
+                this.Handle = handle;
+            }
+
+            //public static Pin
+            //public Free
+            //public implicit
+        }
+
+        private Dictionary<IntPtr, PinnedArray> pool;
         
         public T[] this[IntPtr pBase] {
-            get { return pinnedArrays[pBase]; }
+            get { return pool[pBase].Array; }
         }    
 
         public PinnedArrayPool() {
-            this.pinnedArrays = new Dictionary<IntPtr, T[]>();
-            this.gcHandles = new Dictionary<IntPtr, GCHandle>();
+            this.pool = new Dictionary<IntPtr, PinnedArray>();            
         }
 
         /// <summary>
@@ -41,8 +54,7 @@ namespace LMDotNet.Native
             var array = new T[count];
             var gch = GCHandle.Alloc(array, GCHandleType.Pinned);
             var pBase = gch.AddrOfPinnedObject();
-            pinnedArrays[pBase] = array;
-            gcHandles[pBase] = gch;
+            pool[pBase] = new PinnedArray(array, gch);
             return pBase;
         }
 
@@ -51,20 +63,19 @@ namespace LMDotNet.Native
         /// </summary>
         /// <param name="baseAddress">Base address of the array to unpin</param>
         public void UnpinArray(IntPtr baseAddress) {
-            gcHandles[baseAddress].Free();
-            gcHandles.Remove(baseAddress);
-            pinnedArrays.Remove(baseAddress);
+            pool[baseAddress].Handle.Free();
+            pool.Remove(baseAddress);
         }
 
         // TODO: implement a correct Dispose() method...
         public void Dispose() {
-            if (gcHandles != null) {
-                foreach (var gch in gcHandles.Values) {
-                    gch.Free();                    
+            if (pool != null) {
+                foreach (var arr in pool.Values) {
+                    arr.Handle.Free();
                 }
-                gcHandles = null;
+                pool = null;
             }
-            pinnedArrays = null;            
+            pool = null;            
             GC.SuppressFinalize(this);
         }
     } 
