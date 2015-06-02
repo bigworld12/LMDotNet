@@ -38,6 +38,15 @@
         /// </summary>
         public bool TerminatedByUserRequest { get; private set; }
 
+        /// <summary>
+        /// Creates a new OptimizationResult instance
+        /// </summary>
+        /// <param name="optimizedParameters">Determined optimial parameters</param>
+        /// <param name="errorNorm">Norm of the residue vector fvec</param>
+        /// <param name="iterations">Actual number of iterations</param>
+        /// <param name="outcome">Status indicator (converged, failed, ...)</param>
+        /// <param name="message">Status message</param>
+        /// <param name="terminatedByUser">Set when function evaluation requests termination</param>
         public OptimizationResult(
             double[] optimizedParameters, 
             double errorNorm, 

@@ -122,7 +122,7 @@ namespace LMDotNet
         /// <param name="mData">Number of data points == number of equations == length of the residue vector</param>
         /// <returns>Optimization outcome and optimal paramters, if successful</returns>
         private OptimizationResult CallNativeSolver(
-            LMDelegate fun, double[] parameters, 
+            LMDelegate fun, PinnedArray<double> parameters, 
             AllocatorDelegate allocate, DeallocatorDelegate deallocate,
             int mData)
         {
@@ -140,10 +140,19 @@ namespace LMDotNet
                 stepbound = this.InitialStepbound,
                 verbosity = this.VerboseOutput ? 3 : 0
             };
-
+            
             LMStatusStruct stat = new LMStatusStruct();
             // call native lmmin from lmfit package
-            LMFit.lmmin(parameters.Length, parameters, mData, IntPtr.Zero, fun, ref ctrl, ref stat, allocate, deallocate);
+            LMFit.lmmin(
+                parameters.Array.Length, 
+                parameters.Address, 
+                mData, 
+                IntPtr.Zero, 
+                fun, 
+                ref ctrl, 
+                ref stat, 
+                allocate, 
+                deallocate);
 
             // extract results from lmmin's result data struct
             OptimizationResult result = new OptimizationResult(
@@ -176,24 +185,23 @@ namespace LMDotNet
            OptimizationResult result = null;
            
            using (var pool = new PinnedArrayPool<double>()) {
-               // optimizedPars must be allocated via allocator, because
+               // optimizedPars must be pinned, because
                // the first callback-call (== call to nativeFun) passes a 
-               // pointer to optimizedPars in the "par" parameter
-               var pOptimizedPars = pool.AllocatePinnedArray(x0.Length);
-               var optimizedPars = pool[pOptimizedPars];
+               // pointer to optimizedPars in  "par" parameter
+               var optimizedPars = pool.AllocatePinnedArray(x0.Length);
                x0.CopyTo(optimizedPars, 0);
-
+               
                result = CallNativeSolver(
                    // translate Action<double[], double[]> to LMDelegate:
                    (par, m_dat, dataPtr, fvec, userbreak) => f(pool[par], pool[fvec]),
                    optimizedPars,
-                   pool.AllocatePinnedArray,
-                   pool.UnpinArray,
+                   pool.Calloc,
+                   pool.Free,
                    nDataPoints);
 
                // pinned managed arrays allocated by lmmin may be garbage collected 
                // starting from here (if unpinned and not referenced anymore)
-               pool.UnpinArray(pOptimizedPars);
+               pool.UnpinArray(optimizedPars);
                GC.KeepAlive(pool); // really neccessary?
            }
 
