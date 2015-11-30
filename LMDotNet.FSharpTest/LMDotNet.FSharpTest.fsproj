@@ -9,9 +9,9 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>LMDotNet.FSharpTest</RootNamespace>
     <AssemblyName>LMDotNet.FSharpTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
+    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <Name>LMDotNet.FSharpTest</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -52,14 +52,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-452\LMDotNet-452.csproj">
-      <Name>LMDotNet-452</Name>
-      <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
+    <ProjectReference Include="..\LMDotNet-46\LMDotNet-46.csproj">
+      <Name>LMDotNet-46</Name>
+      <Project>{cdd86083-1e23-41bd-864b-aad25031f532}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\LMDotNet.FSharp-452\LMDotNet.FSharp-452.fsproj">
-      <Name>LMDotNet.FSharp-452</Name>
-      <Project>{53d86ca3-e2b8-4b6a-8115-34bf8ab93888}</Project>
+    <ProjectReference Include="..\LMDotNet.FSharp-46\LMDotNet.FSharp-46.fsproj">
+      <Name>LMDotNet.FSharp-46</Name>
+      <Project>{ae26d6ad-e912-44a5-ac92-bc5500b8a64b}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

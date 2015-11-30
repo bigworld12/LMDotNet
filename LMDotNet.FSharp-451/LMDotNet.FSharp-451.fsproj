@@ -66,7 +66,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LMDotNet.FSharp-452\LMA.fs">
+    <Compile Include="..\LMDotNet.FSharp-46\LMA.fs">
       <Link>LMA.fs</Link>
     </Compile>
   </ItemGroup>

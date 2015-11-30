@@ -62,6 +62,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LMDotNet.FSharp-452", "LMDo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMDotNet-46", "LMDotNet-46\LMDotNet-46.csproj", "{CDD86083-1E23-41BD-864B-AAD25031F532}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LMDotNet.FSharp-46", "LMDotNet.FSharp-46\LMDotNet.FSharp-46.fsproj", "{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -284,6 +286,26 @@ Global
 		{CDD86083-1E23-41BD-864B-AAD25031F532}.Release|x64.Build.0 = Release|Any CPU
 		{CDD86083-1E23-41BD-864B-AAD25031F532}.Release|x86.ActiveCfg = Release|Any CPU
 		{CDD86083-1E23-41BD-864B-AAD25031F532}.Release|x86.Build.0 = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|Win32.Build.0 = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|x64.Build.0 = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Debug|x86.Build.0 = Debug|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|Win32.ActiveCfg = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|Win32.Build.0 = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|x64.ActiveCfg = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|x64.Build.0 = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE26D6AD-E912-44A5-AC92-BC5500B8A64B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
