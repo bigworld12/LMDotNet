@@ -9,12 +9,14 @@ namespace LMDotNet.CSharpTest
 {
     class Program
     {
+        private const bool native = true;
+
         /// <summary>
         /// Demonstrates how to solve systems of non-linear
         /// equations using the LMA
         /// </summary>        
         static void SolveExamples() {
-            var solver = new LMSolver();
+            var solver = new LMSolver(useNativeBackend: native);
 
             // 1st example:
             // Aim: Find (x, y) for which
@@ -72,7 +74,7 @@ namespace LMDotNet.CSharpTest
         /// LMSolver.Minimize
         /// </summary>
         static void GenericMinimizationExamples() {
-            var solver = new LMSolver();
+            var solver = new LMSolver(useNativeBackend: native);
 
             // grid points
             var xs = new[] { -1.0, -1.0,  1.0, 1.0 };
@@ -115,7 +117,7 @@ namespace LMDotNet.CSharpTest
         /// Curve fitting using the Fit... convenience functions
         /// </summary>
         static void CurveFittingExamples() {
-            var solver = new LMSolver();
+            var solver = new LMSolver(useNativeBackend: native);
 
             // 1st example: fit a model that is non-linear in its parameters
             //      y' = p1 * sin(p2 * t + p3) + p4
@@ -123,7 +125,7 @@ namespace LMDotNet.CSharpTest
             // => minimize sum((y - y')²)
             //
             // for generating some noise
-            var rand = new Random();
+            var rand = new Random(12345);
             // sample points (here: equidistant)
             var ts   = Enumerable.Range(0, 100).Select(i => i * 0.01).ToArray();
             // signal: "measured" values at sample points

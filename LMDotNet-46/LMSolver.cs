@@ -4,6 +4,12 @@ using System.Diagnostics;
 
 namespace LMDotNet
 {
+    // TODO: XML comments
+    public enum Backend
+    {
+        NativeLmmin, ManagedLmmin
+    }
+
     /// <summary>
     /// Levenberg-Marquardt non-linear least squares solver based on lmfit
     /// </summary>
@@ -51,8 +57,12 @@ namespace LMDotNet
         /// <summary> true: print status messages to stdout</summary>
         public bool VerboseOutput { get; set; }
 
+        /// <summary>get/set the minimizer implementation to use</summary>
+        public Backend OptimizerBackend { get; set; }
+
         // from lmmin.c
-        private const double defaultTolerance = 1.0e-14;
+        private const double machineEpsilon = 2.2204460492503131e-16; // smallest normalized dp value
+        private const double defaultTolerance = 30.0 * machineEpsilon;
 
         // from lmmin.c
         private static readonly string[] outcomeMessages =
@@ -93,6 +103,7 @@ namespace LMDotNet
         /// to patience * (number_of_parameters + 1)</param>
         /// <param name="scaleDiagonal">If 1, the variables will be rescaled internally. Recommended value is 1.</param>
         /// <param name="verbose">true: print status messages to stdout</param>
+        /// <param name="useNativeBackend">true: use native C implementation of lmmin</param>
         public LMSolver(double ftol = defaultTolerance,
                         double xtol = defaultTolerance,
                         double gtol = defaultTolerance,
@@ -100,7 +111,8 @@ namespace LMDotNet
                         double stepbound = 100.0,
                         int patience = 100,
                         bool scaleDiagonal = true,
-                        bool verbose = false) {
+                        bool verbose = false,
+                        bool useNativeBackend = true) {
             this.Ftol = ftol;
             this.Xtol = xtol;
             this.Gtol = gtol;
@@ -109,6 +121,12 @@ namespace LMDotNet
             this.Patience = patience;
             this.ScaleDiagonal = scaleDiagonal;
             this.VerboseOutput = verbose;
+            if (useNativeBackend) {
+                this.OptimizerBackend = Backend.NativeLmmin;
+            }
+            else {
+                this.OptimizerBackend = Backend.ManagedLmmin;
+            }
         }               
 
         /// <summary>
@@ -182,30 +200,63 @@ namespace LMDotNet
        /// <remarks>Invariant: nDataPoints &gt;= length(x0)</remarks>
        /// <returns>Optimum x_opt (if successful) and solution status</returns>
        public OptimizationResult Minimize(Action<double[], double[]> f, double[] x0, int nDataPoints) {
-           OptimizationResult result = null;
-           
-           using (var pool = new PinnedArrayPool<double>()) {
-               // optimizedPars must be pinned, because
-               // the first callback-call (== call to nativeFun) passes a 
-               // pointer to optimizedPars in  "par" parameter
-               var optimizedPars = pool.AllocatePinnedArray(x0.Length);
-               x0.CopyTo(optimizedPars, 0);
-               
-               result = CallNativeSolver(
-                   // translate Action<double[], double[]> to LMDelegate:
-                   (par, m_dat, dataPtr, fvec, userbreak) => f(pool[par], pool[fvec]),
-                   optimizedPars,
-                   pool.Calloc,
-                   pool.Free,
-                   nDataPoints);
+           if (OptimizerBackend == Backend.NativeLmmin) {
+               OptimizationResult result = null;
+                // TODO: move impl. details (array pool etc.) to native-specific function
+                using (var pool = new PinnedArrayPool<double>()) {
+                   // optimizedPars must be pinned, because
+                   // the first callback-call (== call to nativeFun) passes a 
+                   // pointer to optimizedPars in  "par" parameter
+                   var optimizedPars = pool.AllocatePinnedArray(x0.Length);
+                   x0.CopyTo(optimizedPars, 0);
 
-               // pinned managed arrays allocated by lmmin may be garbage collected 
-               // starting from here (if unpinned and not referenced anymore)
-               pool.UnpinArray(optimizedPars);
-               GC.KeepAlive(pool); // really neccessary?
+                   result = CallNativeSolver(
+                       // translate Action<double[], double[]> to LMDelegate:
+                       (par, m_dat, dataPtr, fvec, userbreak) => f(pool[par], pool[fvec]),
+                       optimizedPars,
+                       pool.Calloc,
+                       pool.Free,
+                       nDataPoints);
+
+                    // pinned managed arrays allocated by lmmin may be garbage collected 
+                    // starting from here (if unpinned and not referenced anymore)
+                   pool.UnpinArray(optimizedPars);
+                   GC.KeepAlive(pool); // really neccessary?
+               }
+
+               return result;
            }
-
-           return result;
+            // TODO: remove duplicated code (ctrl and stat creation, result extraction)            
+            else {                
+                // build control structure understood by lmmin
+                LMControlStruct ctrl = new LMControlStruct {
+                    ftol = this.Ftol,
+                    gtol = this.Gtol,
+                    xtol = this.Xtol,
+                    patience = this.Patience,
+                    epsilon = this.Epsilon,
+                    msgfile = IntPtr.Zero,
+                    m_maxpri = -1,
+                    n_maxpri = -1,
+                    scale_diag = this.ScaleDiagonal ? 1 : 0,
+                    stepbound = this.InitialStepbound,
+                    verbosity = this.VerboseOutput ? 3 : 0
+                };
+                LMStatusStruct stat = new LMStatusStruct();
+                var optimizedPars = new double[x0.Length];
+                x0.CopyTo(optimizedPars, 0);
+                LMMinManaged.LMMin(x0.Length, optimizedPars, nDataPoints, f, ref ctrl, ref stat);
+                // extract results from lmmin's result data struct
+                OptimizationResult result = new OptimizationResult(
+                    optimizedPars,
+                    stat.fnorm,
+                    stat.nfev,
+                    (SolverStatus)stat.outcome,
+                    LMSolver.outcomeMessages[stat.outcome],
+                    stat.userbreak > 0 ? true : false
+                );
+                return result;
+            }
         }
 
         /// <summary>
@@ -304,6 +355,6 @@ namespace LMDotNet
                 }
             };
             return Minimize(fun, beta0, samples.Length);
-        }
+        }        
     }
 }

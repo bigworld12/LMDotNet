@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="..\LMDotNet-46\LmMinManaged.cs">
+      <Link>LmMinManaged.cs</Link>
+    </Compile>
     <Compile Include="..\LMDotNet-46\LMSolver.cs">
       <Link>LMSolver.cs</Link>
     </Compile>
