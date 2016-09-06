@@ -15,8 +15,8 @@ namespace LMDotNet.CSharpTest
         /// Demonstrates how to solve systems of non-linear
         /// equations using the LMA
         /// </summary>        
-        static void SolveExamples() {
-            var solver = new LMSolver(useNativeBackend: native);
+        static void SolveExamples(LMBackend solverType) {
+            var solver = new LMSolver(optimizerBackend: solverType);
 
             // 1st example:
             // Aim: Find (x, y) for which
@@ -73,8 +73,8 @@ namespace LMDotNet.CSharpTest
         /// Demonstrantes the usage of the generic minimization API
         /// LMSolver.Minimize
         /// </summary>
-        static void GenericMinimizationExamples() {
-            var solver = new LMSolver(useNativeBackend: native);
+        static void GenericMinimizationExamples(LMBackend solverType) {
+            var solver = new LMSolver(optimizerBackend: solverType);
 
             // grid points
             var xs = new[] { -1.0, -1.0,  1.0, 1.0 };
@@ -116,8 +116,8 @@ namespace LMDotNet.CSharpTest
         /// <summary>
         /// Curve fitting using the Fit... convenience functions
         /// </summary>
-        static void CurveFittingExamples() {
-            var solver = new LMSolver(useNativeBackend: native);
+        static void CurveFittingExamples(LMBackend solverType) {
+            var solver = new LMSolver(optimizerBackend: solverType);
 
             // 1st example: fit a model that is non-linear in its parameters
             //      y' = p1 * sin(p2 * t + p3) + p4
@@ -154,9 +154,32 @@ namespace LMDotNet.CSharpTest
         }
         
         static void Main(string[] args) {
-            Program.SolveExamples();            
-            Program.CurveFittingExamples();
-            Program.GenericMinimizationExamples();
+            Console.WriteLine("Solve system of non-linear equations");
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Native LMMIN");
+            Program.SolveExamples(LMBackend.NativeLmmin);
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Managed LMMIN");
+            Program.SolveExamples(LMBackend.ManagedLmmin);
+
+            Console.WriteLine("=====================================================================================");
+            Console.WriteLine("Curve fitting");
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Native LMMIN");
+            Program.CurveFittingExamples(LMBackend.NativeLmmin);
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Managed LMMIN");
+            Program.CurveFittingExamples(LMBackend.ManagedLmmin);
+
+
+            Console.WriteLine("=====================================================================================");
+            Console.WriteLine("Generic minimization");
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Native LMMIN");
+            Program.GenericMinimizationExamples(LMBackend.NativeLmmin);
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Managed LMMIN");
+            Program.GenericMinimizationExamples(LMBackend.ManagedLmmin);
         }
     }
 }
