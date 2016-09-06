@@ -45,14 +45,20 @@ type SolverSettings =
       /// <summary>
       /// true: print status messages to stdout
       /// </summary>
-      verboseOutput: bool }
+      verboseOutput: bool
+      
+      /// <summary>
+      /// choose solver implementation (native or managed)
+      /// </summary>
+      optimizerBackend: LMBackend }
 
 module LMA =
     open System
     open LMDotNet
     
     let defaultSettings =
-        let defaultTolerance = 1.0e-14;
+        let machineEpsilon = 2.2204460492503131e-16; // smallest normalized dp value
+        let defaultTolerance = 30.0 * machineEpsilon;
         { ftol = defaultTolerance
           xtol = defaultTolerance
           gtol = defaultTolerance
@@ -60,7 +66,8 @@ module LMA =
           initialStepbound = 100.0
           patience = 100
           scaleDiagonal = true
-          verboseOutput = false }
+          verboseOutput = false
+          optimizerBackend = LMBackend.NativeLmmin }
 
     let init settings =
         let solver = LMSolver()
@@ -72,6 +79,7 @@ module LMA =
         solver.ScaleDiagonal <- settings.scaleDiagonal
         solver.VerboseOutput <- settings.verboseOutput
         solver.Patience <- settings.patience
+        solver.OptimizerBackend <- settings.optimizerBackend
         solver
     
     /// <summary>
