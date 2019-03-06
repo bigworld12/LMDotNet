@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard1.6;net45;net451;net452;net46;net461;net462;</TargetFrameworks>
+    <AssemblyName>LMDotNet.FSharp</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="LMA.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LMDotNet\LMDotNet.csproj" />
+  </ItemGroup>
+
+</Project>

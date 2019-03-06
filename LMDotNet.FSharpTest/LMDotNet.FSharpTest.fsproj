@@ -11,7 +11,7 @@
     <AssemblyName>LMDotNet.FSharpTest</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
+    <TargetFSharpCoreVersion>4.4.3.0</TargetFSharpCoreVersion>
     <Name>LMDotNet.FSharpTest</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -38,31 +38,6 @@
     <DocumentationFile>bin\Release\LMDotNet.FSharpTest.XML</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.fs" />
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-46\LMDotNet-46.csproj">
-      <Name>LMDotNet-46</Name>
-      <Project>{cdd86083-1e23-41bd-864b-aad25031f532}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\LMDotNet.FSharp-46\LMDotNet.FSharp-46.fsproj">
-      <Name>LMDotNet.FSharp-46</Name>
-      <Project>{ae26d6ad-e912-44a5-ac92-bc5500b8a64b}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -85,6 +60,30 @@ copy "$(SolutionDir)lmfit32\bin\$(Configuration)\lmfit.dll" "$(TargetDir)\lmfit3
 mkdir "$(TargetDir)\lmfit64"
 copy "$(SolutionDir)lmfit64\bin\$(Configuration)\lmfit.dll" "$(TargetDir)\lmfit64"</PostBuildEvent>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LMDotNet.FSharp\LMDotNet.FSharp.fsproj">
+      <Name>LMDotNet.FSharp</Name>
+      <Project>{f84d5f2b-ac8e-41d1-acb4-f08e0e4826bd}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

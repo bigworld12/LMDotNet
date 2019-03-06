@@ -46,13 +46,6 @@
       <Link>LMA.fs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-45\LMDotNet-45.csproj">
-      <Name>LMDotNet-45</Name>
-      <Project>{f9297e75-a0eb-41a9-b0f1-9f5954fdf2c5}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>

@@ -63,13 +63,6 @@
       <Link>LMA.fs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-452\LMDotNet-452.csproj">
-      <Name>LMDotNet-452</Name>
-      <Project>{d4a228a4-2c3b-4e8c-b7c5-cb3c6c0af53b}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

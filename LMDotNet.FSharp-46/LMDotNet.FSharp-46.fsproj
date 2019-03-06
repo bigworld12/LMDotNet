@@ -50,6 +50,13 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Compile Include="LMA.fs" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.4.6.2\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
@@ -57,14 +64,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="LMA.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LMDotNet-46\LMDotNet-46.csproj">
-      <Name>LMDotNet-46</Name>
-      <Project>{CDD86083-1E23-41BD-864B-AAD25031F532}</Project>
+    <ProjectReference Include="..\LMDotNet\LMDotNet.csproj">
+      <Name>LMDotNet</Name>
+      <Project>{37449661-c167-4aa9-b3db-3c4a9b1372e3}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
