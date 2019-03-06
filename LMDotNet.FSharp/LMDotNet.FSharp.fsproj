@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.6;net45;net451;net452;net46;net461;net462;</TargetFrameworks>
+    <PackageId>LMDotNet.FSharp.Core</PackageId>
     <AssemblyName>LMDotNet.FSharp</AssemblyName>
+    <Version>1.8.0</Version>
+    <Authors>Frank Niemeyer</Authors>
+    <Product>LM.NET for F#</Product>
+    
+    <Description>Levenberg-Marquardt for F# .NET standard 1.6+ and .net framework 4.5+</Description>
+    <Copyright>Copyright ©2013, 2014, 2015 Frank Niemeyer</Copyright>
+    <AssemblyVersion>1.8.0.0</AssemblyVersion>
+    <FileVersion>1.8.0.0</FileVersion>
+    <PackageProjectUrl>https://github.com/bigworld12/LMDotNet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bigworld12/LMDotNet</RepositoryUrl>
+    <PackageTags>LMDotNet.FSharp LMDotNet.f# LMDotNet LM Levenberg Leven Marquardt Marq Levenberg-Marquardt LM. LM.net</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
