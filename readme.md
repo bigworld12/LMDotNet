@@ -1,5 +1,9 @@
+# This is a port to .net standard 
+
+  Original Project: http://bitbucket.org/frank_niemeyer/lmdotnet/
+
 # LM.NET — Levenberg-Marquardt algorithm (LMA) for .NET
-[![NuGet Status](http://img.shields.io/badge/NuGet-Release-brightgreen.svg?style=flat-square)](https://www.nuget.org/packages/LMDotNet/)
+[![NuGet Status](http://img.shields.io/badge/NuGet-Release-brightgreen.svg?style=flat-square)](https://www.nuget.org/packages/LMDotNet.Core/)
 
 LM.NET provides an implementation of the Levenberg-Marquardt algorithm (LMA) for solving non-linear least-squares problems, e.g. for curve fitting (regression) or solving non-linear systems (in a least-squares sense).
 

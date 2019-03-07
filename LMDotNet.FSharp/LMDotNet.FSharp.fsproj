@@ -15,6 +15,7 @@
     <PackageProjectUrl>https://github.com/bigworld12/LMDotNet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bigworld12/LMDotNet</RepositoryUrl>
     <PackageTags>LMDotNet.FSharp LMDotNet.f# LMDotNet LM Levenberg Leven Marquardt Marq Levenberg-Marquardt LM. LM.net</PackageTags>
+    <PackageLicenseFile>license.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LMDotNet\LMDotNet.csproj" />
+    <PackageReference Include="LMDotNet.Core" Version="1.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\license.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  
 </Project>

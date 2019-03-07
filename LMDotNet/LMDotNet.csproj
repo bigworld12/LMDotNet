@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/bigworld12/LMDotNet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bigworld12/LMDotNet</RepositoryUrl>
     <PackageTags>LMDotNet LM Levenberg Leven Marquardt Marq Levenberg-Marquardt LM. LM.net</PackageTags>
+    <PackageLicenseFile>license.md</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="../lmfit64/bin/Release/lmfit.dll">
@@ -40,6 +41,12 @@
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackagePath>content/lmfit32</PackagePath>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\license.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
