@@ -277,8 +277,9 @@ namespace LMDotNet
         /// <summary>
         /// 1D-curve fitting (non-linear regression): optimize a parameter vector beta
         /// for a model equation to minimize the sum of squared residuals, i.e.:
-        /// x: sample point, y: measured data, y': predicted value by the model;
+        /// x: sample point, y: measured data, y': predicted value by the model, w: list of weights;
         /// Residual for datapoint i: eps_i = y_i - model(x_i, beta);
+        /// Or, in the case of weighted fitting, eps_i = w_i * (y_i - model(x_i, beta));)
         /// find beta_opt = argmin_beta ||eps_i||²
         /// </summary>
         /// <param name="model">Regression model to fit to the data points; 
@@ -289,14 +290,16 @@ namespace LMDotNet
         /// <param name="beta0">Initial guess for the model parameter vector</param>
         /// <param name="xs">sampling locations</param>
         /// <param name="ys">samples (data points)</param>
+        /// <param name="ws">weights for each sample</param>
         /// <returns>Optimized model parameters and status</returns>
-        /// <remarks>Invariant: xs.Length == ys.Length</remarks>
-        public OptimizationResult FitCurve(Func<double, double[], double> model, double[] beta0, double[] xs, double[] ys) {
+        /// <remarks>Invariant: xs.Length == ys.Length == ws.Length</remarks>
+        public OptimizationResult FitCurve(Func<double, double[], double> model, double[] beta0, double[] xs, double[] ys, double[] ws = null) {
             Debug.Assert(xs.Length == ys.Length);
+            if (ws != null) Debug.Assert(xs.Length == ws.Length);
 
             Action<double[], double[]> fun = (parameters, residuals) => {
                 for (int i = 0; i < xs.Length; ++i) {
-                    residuals[i] = ys[i] - model(xs[i], parameters);
+                    residuals[i] = (ws?[i] ?? 1d) * (ys[i] - model(xs[i], parameters));
                 }
             };
             return Minimize(fun, beta0, xs.Length);
@@ -305,8 +308,9 @@ namespace LMDotNet
         /// <summary>
         /// 2D-curve fitting (non-linear regression): optimize a parameter vector beta
         /// for a model equation to minimize the sum of squared residuals, i.e.:
-        /// (x, y): sample point, z: measured data, z': predicted value by the model;
+        /// (x, y): sample point, z: measured data, z': predicted value by the model, w: list of weights;
         /// Residual for datapoint i: eps_i = z_i - model(x_i, y_i, beta);
+        /// Or, in the case of weighted fitting, eps_i = w_i * (z_i - model(x_i, y_i, beta));)
         /// find beta_opt = argmin_beta ||eps_i||²
         /// </summary>
         /// <param name="model">Regression model to fit to the data points; 
@@ -318,15 +322,17 @@ namespace LMDotNet
         /// <param name="beta0">Initial guess for the model parameter vector</param>
         /// <param name="xs">First coordinate of the sampling locations</param>
         /// <param name="ys">Second coordinate of the sampling locations</param>
-        /// <param name="zs">samples (data points) for each (x, y) location</param>
+        /// <param name="zs">samples (data points) for each (x, y) location</param> 
+        /// <param name="ws">weights for each sample</param>
         /// <returns>Optimized model parameters and status</returns>
-        /// <remarks>Invariant: xs.Length == ys.Length == zs.Length</remarks>
-        public OptimizationResult FitSurface(Func<double, double, double[], double> model, double[] beta0, double[] xs, double[] ys, double[] zs) {
+        /// <remarks>Invariant: xs.Length == ys.Length == zs.Length == ws.Length</remarks>
+        public OptimizationResult FitSurface(Func<double, double, double[], double> model, double[] beta0, double[] xs, double[] ys, double[] zs, double[] ws = null) {
             Debug.Assert(xs.Length == ys.Length && ys.Length == zs.Length);
-            
+            if (ws != null) Debug.Assert(xs.Length == ws.Length);
+
             Action<double[], double[]> fun = (parameters, residuals) => {
                 for (int i = 0; i < xs.Length; ++i) {
-                    residuals[i] = zs[i] - model(xs[i], ys[i], parameters);
+                    residuals[i] = (ws?[i] ?? 1d) * (zs[i] - model(xs[i], ys[i], parameters));
                 }
             };
             return Minimize(fun, beta0, xs.Length);
